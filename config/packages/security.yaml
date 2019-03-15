@@ -24,6 +24,9 @@ security:
                 default_target_path: home
                 # form_login: true
                 # https://symfony.com/doc/current/security/form_login_setup.html
+            logout:
+                path: security_logout
+                target: home
 
             # form_login: true
             # https://symfony.com/doc/current/security/form_login_setup.html

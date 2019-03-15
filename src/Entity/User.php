@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -40,7 +39,7 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank()
      */
-    private $forname;
+    private $firstname;
 
     /**
      * @ORM\Column(type="string", length=40)
@@ -64,11 +63,6 @@ class User implements UserInterface, \Serializable
      */
     private $plainPassword;
 
-    /**
-     * @SecurityAssert\UserPassword(
-     *     message = "Wrong value for your current password"
-     * )
-     */
     private $oldPassword;
 
     public function getId(): ?int
@@ -183,17 +177,17 @@ class User implements UserInterface, \Serializable
     /**
      * @return mixed
      */
-    public function getForname()
+    public function getFirstname()
     {
-        return $this->forname;
+        return $this->firstname;
     }
 
     /**
-     * @param mixed $forname
+     * @param mixed $firstname
      */
-    public function setForname($forname): void
+    public function setFirstname($firstname): void
     {
-        $this->forname = $forname;
+        $this->firstname = $firstname;
     }
 
     /**
