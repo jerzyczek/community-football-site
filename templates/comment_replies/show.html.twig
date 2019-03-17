@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CommentReplies{% endblock %}
+
+{% block body %}
+    <h1>CommentReplies</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ comment_reply.id }}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ comment_reply.content }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ comment_reply.updatedAt ? comment_reply.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ comment_reply.createdAt ? comment_reply.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Reactions</th>
+                <td>{{ comment_reply.reactions ? comment_reply.reactions|json_encode : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('comment_replies_index') }}">back to list</a>
+
+    <a href="{{ path('comment_replies_edit', {'id': comment_reply.id}) }}">edit</a>
+
+    {{ include('comment_replies/_delete_form.html.twig') }}
+{% endblock %}
