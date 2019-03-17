@@ -60,9 +60,6 @@ class Post
      */
     private $reactions;
 
-
-
-
     public function __construct()
     {
         $this->commments = new ArrayCollection();
