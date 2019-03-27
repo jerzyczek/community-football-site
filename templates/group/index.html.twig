@@ -11,8 +11,8 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>Description</th>
-                <th>CreatedDate</th>
-                <th>UpdatedDate</th>
+                <th>UpdatedAt</th>
+                <th>CreatedAt</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -22,8 +22,8 @@
                 <td>{{ group.id }}</td>
                 <td>{{ group.name }}</td>
                 <td>{{ group.description }}</td>
-                <td>{{ group.createdDate ? group.createdDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ group.updatedDate ? group.updatedDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ group.updatedAt ? group.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ group.createdAt ? group.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('group_show', {'id': group.id}) }}">show</a>
                     <a href="{{ path('group_edit', {'id': group.id}) }}">edit</a>

@@ -68,12 +68,12 @@ class User implements UserInterface, \Serializable
     private $oldPassword;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Group", mappedBy="userId")
+     * @ORM\OneToMany(targetEntity="App\Entity\Group", mappedBy="user")
      */
     private $groups;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="userId", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="user", orphanRemoval=true)
      */
     private $posts;
 
@@ -263,8 +263,8 @@ class User implements UserInterface, \Serializable
         if ($this->groups->contains($group)) {
             $this->groups->removeElement($group);
             // set the owning side to null (unless already changed)
-            if ($group->getUserId() === $this) {
-                $group->setUserId(null);
+            if ($group->getUser() === $this) {
+                $group->setUser(null);
             }
         }
 
@@ -283,7 +283,7 @@ class User implements UserInterface, \Serializable
     {
         if (!$this->posts->contains($post)) {
             $this->posts[] = $post;
-            $post->setUserId($this);
+            $post->setUser($this);
         }
 
         return $this;
@@ -294,8 +294,8 @@ class User implements UserInterface, \Serializable
         if ($this->posts->contains($post)) {
             $this->posts->removeElement($post);
             // set the owning side to null (unless already changed)
-            if ($post->getUserId() === $this) {
-                $post->setUserId(null);
+            if ($post->getUser() === $this) {
+                $post->setUser(null);
             }
         }
 

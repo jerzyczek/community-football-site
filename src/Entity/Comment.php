@@ -19,16 +19,16 @@ class Comment
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="commments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $postId;
+    private $post;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $userId;
+    private $user;
 
     /**
      * @ORM\Column(type="text")
@@ -36,7 +36,7 @@ class Comment
     private $content;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CommentReplies", mappedBy="commentId", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\CommentReplies", mappedBy="comment", orphanRemoval=true)
      */
     private $commentReplies;
 
@@ -55,30 +55,6 @@ class Comment
         return $this->id;
     }
 
-    public function getPostId(): ?Post
-    {
-        return $this->postId;
-    }
-
-    public function setPostId(?Post $postId): self
-    {
-        $this->postId = $postId;
-
-        return $this;
-    }
-
-    public function getUserId(): ?User
-    {
-        return $this->userId;
-    }
-
-    public function setUserId(?User $userId): self
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
     public function getContent(): ?string
     {
         return $this->content;
@@ -87,37 +63,6 @@ class Comment
     public function setContent(string $content): self
     {
         $this->content = $content;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|CommentReplies[]
-     */
-    public function getCommentReplies(): Collection
-    {
-        return $this->commentReplies;
-    }
-
-    public function addCommentReplies(CommentReplies $commentsReply): self
-    {
-        if (!$this->commentReplies->contains($commentsReply)) {
-            $this->commentReplies[] = $commentsReply;
-            $commentsReply->setCommentId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCommentReplies(CommentReplies $commentsReply): self
-    {
-        if ($this->commentReplies->contains($commentsReply)) {
-            $this->commentReplies->removeElement($commentsReply);
-            // set the owning side to null (unless already changed)
-            if ($commentsReply->getCommentId() === $this) {
-                $commentsReply->setCommentId(null);
-            }
-        }
 
         return $this;
     }
@@ -133,4 +78,61 @@ class Comment
 
         return $this;
     }
+
+    public function getPost(): ?Post
+    {
+        return $this->post;
+    }
+
+    public function setPost(?Post $post): self
+    {
+        $this->post = $post;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CommentReplies[]
+     */
+    public function getCommentReplies(): Collection
+    {
+        return $this->commentReplies;
+    }
+
+    public function addCommentReply(CommentReplies $commentReply): self
+    {
+        if (!$this->commentReplies->contains($commentReply)) {
+            $this->commentReplies[] = $commentReply;
+            $commentReply->setComment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentReply(CommentReplies $commentReply): self
+    {
+        if ($this->commentReplies->contains($commentReply)) {
+            $this->commentReplies->removeElement($commentReply);
+            // set the owning side to null (unless already changed)
+            if ($commentReply->getComment() === $this) {
+                $commentReply->setComment(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

@@ -34,6 +34,7 @@ class PostController extends AbstractController
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($post);
@@ -41,6 +42,7 @@ class PostController extends AbstractController
 
             return $this->redirectToRoute('post_index');
         }
+
 
         return $this->render('post/new.html.twig', [
             'post' => $post,

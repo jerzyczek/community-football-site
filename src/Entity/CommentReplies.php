@@ -17,10 +17,10 @@ class CommentReplies
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Comment", inversedBy="commentsRepliers")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Comment", inversedBy="commentReplies")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $commentId;
+    private $comment;
 
     /**
      * @ORM\Column(type="text")
@@ -31,7 +31,7 @@ class CommentReplies
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $userId;
+    private $user;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -53,18 +53,6 @@ class CommentReplies
         return $this->id;
     }
 
-    public function getCommentId(): ?Comment
-    {
-        return $this->commentId;
-    }
-
-    public function setCommentId(?Comment $commentId): self
-    {
-        $this->commentId = $commentId;
-
-        return $this;
-    }
-
     public function getContent(): ?string
     {
         return $this->content;
@@ -73,18 +61,6 @@ class CommentReplies
     public function setContent(string $content): self
     {
         $this->content = $content;
-
-        return $this;
-    }
-
-    public function getUserId(): ?User
-    {
-        return $this->userId;
-    }
-
-    public function setUserId(?User $userId): self
-    {
-        $this->userId = $userId;
 
         return $this;
     }
@@ -124,4 +100,30 @@ class CommentReplies
 
         return $this;
     }
+
+    public function getComment(): ?Comment
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?Comment $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+
 }

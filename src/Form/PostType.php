@@ -14,11 +14,11 @@ class PostType extends AbstractType
         $builder
             ->add('title')
             ->add('content')
-            ->add('createdDate')
-            ->add('updatedDate')
+            ->add('createdAt')
+            ->add('updatedAt')
             ->add('reactions')
-            ->add('userId')
-            ->add('groupId')
+            ->add('user')
+            ->add('group')
         ;
     }
 

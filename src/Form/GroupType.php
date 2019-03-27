@@ -14,9 +14,9 @@ class GroupType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-            ->add('createdDate')
-            ->add('updatedDate')
-            ->add('userId')
+            ->add('updatedAt')
+            ->add('createdAt')
+            ->add('user')
         ;
     }
 

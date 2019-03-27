@@ -11,8 +11,8 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>Content</th>
-                <th>CreatedDate</th>
-                <th>UpdatedDate</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
                 <th>Reactions</th>
                 <th>actions</th>
             </tr>
@@ -23,8 +23,8 @@
                 <td>{{ post.id }}</td>
                 <td>{{ post.title }}</td>
                 <td>{{ post.content }}</td>
-                <td>{{ post.createdDate ? post.createdDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ post.updatedDate ? post.updatedDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ post.updatedAt ? post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ post.reactions ? post.reactions|json_encode : '' }}</td>
                 <td>
                     <a href="{{ path('post_show', {'id': post.id}) }}">show</a>

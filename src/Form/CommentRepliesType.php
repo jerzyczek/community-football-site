@@ -16,8 +16,8 @@ class CommentRepliesType extends AbstractType
             ->add('updatedAt')
             ->add('createdAt')
             ->add('reactions')
-            ->add('commentId')
-            ->add('userId')
+            ->add('comment')
+            ->add('user')
         ;
     }
 

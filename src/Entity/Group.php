@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
+ * @ORM\Table(name="groups")
  */
 class Group
 {
@@ -29,23 +30,23 @@ class Group
     private $description;
 
     /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createdDate;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="groups")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $userId;
+    private $user;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updatedDate;
+    private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="groupId")
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="group")
      */
     private $posts;
 
@@ -83,38 +84,38 @@ class Group
         return $this;
     }
 
-    public function getCreatedDate(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->createdDate;
+        return $this->updatedAt;
     }
 
-    public function setCreatedDate(\DateTimeInterface $createdDate): self
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
-        $this->createdDate = $createdDate;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->userId;
+        return $this->createdAt;
     }
 
-    public function setUserId(?User $userId): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
-        $this->userId = $userId;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedDate(): ?\DateTimeInterface
+    public function getUser(): ?User
     {
-        return $this->updatedDate;
+        return $this->user;
     }
 
-    public function setUpdatedDate(?\DateTimeInterface $updatedDate): self
+    public function setUser(?User $user): self
     {
-        $this->updatedDate = $updatedDate;
+        $this->user = $user;
 
         return $this;
     }
@@ -131,7 +132,7 @@ class Group
     {
         if (!$this->posts->contains($post)) {
             $this->posts[] = $post;
-            $post->setGroupId($this);
+            $post->setGroup($this);
         }
 
         return $this;
@@ -142,11 +143,14 @@ class Group
         if ($this->posts->contains($post)) {
             $this->posts->removeElement($post);
             // set the owning side to null (unless already changed)
-            if ($post->getGroupId() === $this) {
-                $post->setGroupId(null);
+            if ($post->getGroup() === $this) {
+                $post->setGroup(null);
             }
         }
 
         return $this;
     }
+
+
+
 }

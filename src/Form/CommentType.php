@@ -14,8 +14,8 @@ class CommentType extends AbstractType
         $builder
             ->add('content')
             ->add('reactions')
-            ->add('postId')
-            ->add('userId')
+            ->add('post')
+            ->add('user')
         ;
     }
 

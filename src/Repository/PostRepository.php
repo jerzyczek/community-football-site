@@ -1,11 +1,9 @@
 <?php
-
 namespace App\Repository;
 
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-
 /**
  * @method Post|null find($id, $lockMode = null, $lockVersion = null)
  * @method Post|null findOneBy(array $criteria, array $orderBy = null)
@@ -18,7 +16,6 @@ class PostRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Post::class);
     }
-
     // /**
     //  * @return Post[] Returns an array of Post objects
     //  */
@@ -35,7 +32,6 @@ class PostRepository extends ServiceEntityRepository
         ;
     }
     */
-
     /*
     public function findOneBySomeField($value): ?Post
     {

@@ -18,29 +18,27 @@ class GroupRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Group::class);
     }
-
     // /**
-    //  * @return Group[] Returns an array of Group objects
+    //  * @return Post[] Returns an array of Post objects
     //  */
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('g')
-            ->andWhere('g.exampleField = :val')
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.exampleField = :val')
             ->setParameter('val', $value)
-            ->orderBy('g.id', 'ASC')
+            ->orderBy('p.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
     */
-
     /*
-    public function findOneBySomeField($value): ?Group
+    public function findOneBySomeField($value): ?Post
     {
-        return $this->createQueryBuilder('g')
-            ->andWhere('g.exampleField = :val')
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()

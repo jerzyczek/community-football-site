@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Group;
+use App\Entity\User;
 use App\Form\GroupType;
 use App\Repository\GroupRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +22,16 @@ class GroupController extends AbstractController
      */
     public function index(GroupRepository $groupRepository): Response
     {
+//        $userRepo = $this->getDoctrine()
+//            ->getRepository(User::class);
+//        dump($userRepo->findAll());
+//        die;
+            $groupRepository->findAll();
+
+//        dump();
+//        die;
+
+
         return $this->render('group/index.html.twig', [
             'groups' => $groupRepository->findAll(),
         ]);

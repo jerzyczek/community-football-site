@@ -27,13 +27,13 @@ class Post
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $userId;
+    private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Group", inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $groupId;
+    private $group;
 
     /**
      * @ORM\Column(type="text")
@@ -43,17 +43,17 @@ class Post
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdDate;
+    private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $updatedDate;
+    private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="postId", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="post", orphanRemoval=true)
      */
-    private $commments;
+    private $comments;
 
     /**
      * @ORM\Column(type="json_array", nullable=true)
@@ -62,7 +62,7 @@ class Post
 
     public function __construct()
     {
-        $this->commments = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,30 +82,6 @@ class Post
         return $this;
     }
 
-    public function getUserId(): ?User
-    {
-        return $this->userId;
-    }
-
-    public function setUserId(?User $userId): self
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    public function getGroupId(): ?Group
-    {
-        return $this->groupId;
-    }
-
-    public function setGroupId(?Group $groupId): self
-    {
-        $this->groupId = $groupId;
-
-        return $this;
-    }
-
     public function getContent(): ?string
     {
         return $this->content;
@@ -118,57 +94,26 @@ class Post
         return $this;
     }
 
-    public function getCreatedDate(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->createdDate;
+        return $this->createdAt;
     }
 
-    public function setCreatedDate(\DateTimeInterface $createdDate): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
-        $this->createdDate = $createdDate;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedDate(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->updatedDate;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedDate(?\DateTimeInterface $updatedDate): self
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
-        $this->updatedDate = $updatedDate;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Comment[]
-     */
-    public function getCommments(): Collection
-    {
-        return $this->commments;
-    }
-
-    public function addCommment(Comment $commment): self
-    {
-        if (!$this->commments->contains($commment)) {
-            $this->commments[] = $commment;
-            $commment->setPostId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCommment(Comment $commment): self
-    {
-        if ($this->commments->contains($commment)) {
-            $this->commments->removeElement($commment);
-            // set the owning side to null (unless already changed)
-            if ($commment->getPostId() === $this) {
-                $commment->setPostId(null);
-            }
-        }
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
@@ -184,5 +129,61 @@ class Post
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getGroup(): ?Group
+    {
+        return $this->group;
+    }
+
+    public function setGroup(?Group $group): self
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setPost($this);
+        }
+
+        return $this;
+    }
+
+    public function removecomment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getPost() === $this) {
+                $comment->setPost(null);
+            }
+        }
+
+        return $this;
+    }
+
 
 }
