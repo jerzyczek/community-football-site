@@ -17,8 +17,8 @@ class PostType extends AbstractType
             ->add('createdAt')
             ->add('updatedAt')
             ->add('reactions')
-            ->add('user')
-            ->add('group')
+//            ->add('user')
+//            ->add('group')
         ;
     }
 

@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
  * @ORM\Table(name="groups")
+ * @ORM\HasLifecycleCallbacks
  */
 class Group
 {
@@ -50,10 +51,14 @@ class Group
      */
     private $posts;
 
+
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
     }
+
+
 
     public function getId(): ?int
     {
@@ -151,6 +156,28 @@ class Group
         return $this;
     }
 
+    /**
+     * Gets triggered only on insert
 
+     * @ORM\PrePersist
+     */
+    public function updatedTimestamps() : void
+    {
+        $this->updatedAt = new \DateTime("now");
+        if($this->createdAt === null)
+        {
+            $this->createdAt = new \DateTime("now");
+        }
 
+    }
+
+    /**
+     * Gets triggered every time on update
+
+     * @ORM\PreUpdate
+     */
+    public function onPreUpdate()
+    {
+        $this->updatedAt = new \DateTime("now");
+    }
 }

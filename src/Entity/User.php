@@ -271,6 +271,11 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    public function getDisplayName() : string
+    {
+        return $this->getFirstname() . ' '. $this->getSurname();
+    }
+
     /**
      * @return Collection|Post[]
      */

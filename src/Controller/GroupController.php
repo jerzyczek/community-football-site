@@ -22,16 +22,6 @@ class GroupController extends AbstractController
      */
     public function index(GroupRepository $groupRepository): Response
     {
-//        $userRepo = $this->getDoctrine()
-//            ->getRepository(User::class);
-//        dump($userRepo->findAll());
-//        die;
-            $groupRepository->findAll();
-
-//        dump();
-//        die;
-
-
         return $this->render('group/index.html.twig', [
             'groups' => $groupRepository->findAll(),
         ]);
@@ -53,6 +43,7 @@ class GroupController extends AbstractController
 
             return $this->redirectToRoute('group_index');
         }
+
 
         return $this->render('group/new.html.twig', [
             'group' => $group,
@@ -104,5 +95,17 @@ class GroupController extends AbstractController
         }
 
         return $this->redirectToRoute('group_index');
+    }
+
+    /**
+     * @Route("/{id}/groupView", name="group_client_main", methods={"GET"})
+     */
+    public function getGroupUserView(Request $request)
+    {
+
+        $group = $this->getDoctrine()->getRepository(Group::class)->find($request->get('id'));
+        return $this->render('group/mainGroup.html.twig', [
+            'group' => $group
+        ]);
     }
 }
