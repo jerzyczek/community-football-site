@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Group;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -11,12 +12,22 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Security;
 
 
 class GroupType extends AbstractType
 {
+
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $user = $this->security->getUser();
 
         $builder
             ->add('name', TextType::class, [
@@ -29,16 +40,14 @@ class GroupType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
-            ->add('user', EntityType::class, [
+            ->add('members', EntityType::class, [
                       'class' => User::class,
-                      'choice_name' => 'displayName',
+                      'choice_label' => 'fullName',
                       'attr' => ['class' => 'form-control'],
-                  ]
-            )
-            ->add('user', EntityType::class, [
-                      'class' => User::class,
-                      'choice_label' => 'displayName',
-                      'attr' => ['class' => 'form-control'],
+                      'multiple' => true,
+                      'query_builder' => function (UserRepository $userRepository) use ($user) {
+                          return $userRepository->createFriendsQueryBuilder($user);
+                      },
                   ]
             )
             ->add('Create', SubmitType::class, [

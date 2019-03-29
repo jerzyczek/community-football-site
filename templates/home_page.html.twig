@@ -1,101 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-Home Page
+
 {% endblock %}
 {% block body %}
 
     <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-2 col-sm-12 d-md-block bg-light sidebar">
-                <div class="sidebar-sticky">
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>Your Groups</span>
-                        <a class="d-flex align-items-center text-muted" href="#">
-                            <span data-feather="plus-circle"></span>
-                        </a>
-                    </h6>
-                    <ul class="nav flex-column">
-                        {% for group in app.user.getGroups() %}
-                            <li class="nav-item">
-                                <a class="nav-link active groupViewLink" href="#" data-groupId="{{ group.id }}">
-                                    <span data-feather="home"></span>
-                                    {{ group.getName() }} <span class="sr-only">(current)</span>
-                                </a>
-                            </li>
-                        {% endfor %}
-
-                    </ul>
-
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>Last Posts</span>
-                        <a class="d-flex align-items-center text-muted" href="#">
-                            <span data-feather="plus-circle"></span>
-                        </a>
-                    </h6>
-                    <ul class="nav flex-column mb-2">
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file-text"></span>
-                                Post 1 - Group 2
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
-            </nav>
-
-            <main id="mainView" role="main" class="col-md-8 col-sm-12 ml-sm-auto px-4">
-
-            </main>
-
-            <aside class="col-md-2 bg-light d-md-block">
-                <div class="sidebar-sticky">
-
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>Users Online</span>
-                    </h6>
-                    <ul class="nav flex-column mb-2">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file-text"></span>
-                                User 1
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </aside>
-        </div>
+        <h1>Home</h1>
     </div>
-
 {% endblock %}
 
 
 {% block javascripts %}
-    <script>
 
-        $(document).on('click', 'a.groupViewLink', function () {
-
-            ajaxCall($(this).data('groupid'));
-        });
-
-
-        $(document).ready(function () {
-
-
-        });
-
-        function ajaxCall(groupId) {
-
-            console.log(groupId);
-            $.ajax({
-                type: "GET",
-                url: "group/"+groupId+"/groupView",  //group.id
-                success: function (data) {
-                    $('#mainView').html(data);
-                }
-            });
-        }
-    </script>
 {% endblock %}

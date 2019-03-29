@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Post
 {
@@ -185,5 +186,18 @@ class Post
         return $this;
     }
 
+    /**
+     * Gets triggered only on insert
 
+     * @ORM\PrePersist
+     */
+    public function updatedTimestamps() : void
+    {
+        $this->updatedAt = new \DateTime("now");
+        if($this->createdAt === null)
+        {
+            $this->createdAt = new \DateTime("now");
+        }
+
+    }
 }

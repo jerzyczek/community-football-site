@@ -18,4 +18,13 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
+
+    public function createFriendsQueryBuilder(User $user)
+    {
+        //maybe some day we will have friends :)
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.id != :id')
+            ->setParameter('id', $user->getId())
+            ->orderBy('p.firstname', 'ASC');
+    }
 }

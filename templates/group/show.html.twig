@@ -27,6 +27,14 @@
                 <th>CreatedAt</th>
                 <td>{{ group.createdAt ? group.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+            <tr>
+                <th>Members</th>
+                <td>
+                    {% for member in group.getMembers() %}
+                        {{member.getFirstName }}
+                    {% endfor %}
+                </td>
+            </tr>
         </tbody>
     </table>
 

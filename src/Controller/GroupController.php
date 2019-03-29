@@ -33,11 +33,13 @@ class GroupController extends AbstractController
     public function new(Request $request): Response
     {
         $group = new Group();
+
         $form = $this->createForm(GroupType::class, $group);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $group->setUser($this->getUser());
             $entityManager->persist($group);
             $entityManager->flush();
 
@@ -102,7 +104,6 @@ class GroupController extends AbstractController
      */
     public function getGroupUserView(Request $request)
     {
-
         $group = $this->getDoctrine()->getRepository(Group::class)->find($request->get('id'));
         return $this->render('group/mainGroup.html.twig', [
             'group' => $group

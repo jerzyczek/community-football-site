@@ -77,10 +77,16 @@ class User implements UserInterface, \Serializable
      */
     private $posts;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Group", mappedBy="members")
+     */
+    private $groupsMember;
+
     public function __construct()
     {
         $this->groups = new ArrayCollection();
         $this->posts = new ArrayCollection();
+        $this->groupsMember = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -271,7 +277,7 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
-    public function getDisplayName() : string
+    public function getFullName() : string
     {
         return $this->getFirstname() . ' '. $this->getSurname();
     }
@@ -305,5 +311,38 @@ class User implements UserInterface, \Serializable
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Group[]
+     */
+    public function getGroupsMember(): Collection
+    {
+        return $this->groupsMember;
+    }
+
+    public function addGroupMember(Group $groupsMember): self
+    {
+        if (!$this->groupsMember->contains($groupsMember)) {
+            $this->groupsMember[] = $groupsMember;
+            $groupsMember->addMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroupMember(Group $groupsMember): self
+    {
+        if ($this->groupsMember->contains($groupsMember)) {
+            $this->groupsMember->removeElement($groupsMember);
+            $groupsMember->removeMember($this);
+        }
+
+        return $this;
+    }
+
+    public function __toString ()
+    {
+        return "asd";
     }
 }

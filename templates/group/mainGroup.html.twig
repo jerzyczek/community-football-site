@@ -3,20 +3,58 @@
     <h1 class="h2">{{ group.name }}</h1>
 </div>
 <div class="row">
-    <div class="col-md-12">
-        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-            <div class="col p-4 d-flex flex-column position-static">
-                <strong class="d-inline-block mb-2 text-success">Design</strong>
-                <h3 class="mb-0">Post title</h3>
-                <div class="mb-1 text-muted">Nov 11</div>
-                <p class="mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="stretched-link">Continue reading</a>
+    {%  if group.getPosts()|length > 0 %}
+        {% for post in group.getPosts() %}
+            <div class="col-md-12  no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="row">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-success">{{ post.getUser().getFullName() }}</strong>
+                        <h3 class="mb-0">{{ post.title }}</h3>
+                        <div class="mb-1 text-muted">{{ post.createdAt|date('M d H:i') }}</div>
+                        <p class="mb-auto">{{ post.content }}</p>
+                        <a href="#" class="stretched-link">Continue reading</a>
+                    </div>
+
+                    <div class="col-md-12 no-gutter comments-list">
+                        <div class="page-header">
+                            <h1>Comments<small class="float-right">45 comments</small></h1>
+                        </div>
+                        <div class="row border-bottom">
+                            <div class="media p-4">
+
+                                <a class="media-left " href="#">
+                                    <img src="http://lorempixel.com/40/40/people/1/">
+                                </a>
+                                <div class="media-body ml-4">
+                                    <h4 class="media-heading user_name">Baltej Singh</h4>
+                                    Wow! this is really great.
+
+                                    <p><small><a href="">Like</a></small></p>
+                                </div>
+                                <p class="float-right"><small>5 days ago</small></p>
+                            </div>
+                            <div class="col-md-12 form-group btn-group" role="group" >
+                                    <textarea class="form-control" placeholder="Enter a Comment"></textarea>
+                                {#<button type="button" class="btn btn-secondary">Left</button>#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <div class="col-auto d-none d-lg-block">
-                <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+        {% endfor %}
+    {% else %}
+        <div class="col-md-12">
+            <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-success">NO POSTS</strong>
+                    <h3 class="mb-0">NO POSTS EXAMPLE OF NO POST TEMPLATE</h3>
+                    <div class="mb-1 text-muted">0000-00-00</div>
+                    <p class="mb-auto">NO POSTS</p>
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 </div>
 
 

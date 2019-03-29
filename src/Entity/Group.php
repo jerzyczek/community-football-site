@@ -51,11 +51,16 @@ class Group
      */
     private $posts;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="groupsMember")
+     */
+    private $members;
 
 
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+        $this->members = new ArrayCollection();
     }
 
 
@@ -180,4 +185,32 @@ class Group
     {
         $this->updatedAt = new \DateTime("now");
     }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getMembers(): Collection
+    {
+        return $this->members;
+    }
+
+    public function addMember(User $member): self
+    {
+        if (!$this->members->contains($member)) {
+            $this->members[] = $member;
+        }
+
+        return $this;
+    }
+
+    public function removeMember(User $member): self
+    {
+        if ($this->members->contains($member)) {
+            $this->members->removeElement($member);
+        }
+
+        return $this;
+    }
+
+
 }

@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Group;
 use App\Entity\Post;
 use App\Form\PostType;
+use App\Repository\GroupRepository;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,10 +20,12 @@ class PostController extends AbstractController
     /**
      * @Route("/", name="post_index", methods={"GET"})
      */
-    public function index(PostRepository $postRepository, Request $request): Response
+    public function index(GroupRepository $groupRepository, Request $request): Response
     {
+        $group = $groupRepository->find($request->get('groupId'));
+
         return $this->render('post/index.html.twig', [
-            'posts' => $postRepository->findAll(),
+            'posts' => $group->getPosts(),
         ]);
     }
 
@@ -37,10 +41,15 @@ class PostController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+
+            $post->setUser($this->getUser());
+
+            $group = $this->getDoctrine()->getRepository(Group::class)->find($request->get('groupId'));
+            $post->setGroup($group);
             $entityManager->persist($post);
             $entityManager->flush();
 
-            return $this->redirectToRoute('post_index');
+            return $this->redirectToRoute('post_index', ['groupId' => $request->get('groupId')]);
         }
 
 
