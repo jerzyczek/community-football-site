@@ -5,6 +5,17 @@ nav{
     font-size:14px;
     font-weight: bold;
 }
-.comments-list .media{
-    border-bottom: 1px dotted #ccc;
+
+/*.comments-list .media{*/
+    /*border-bottom: 1px dotted #ccc;*/
+/*}*/
+
+textarea.form-control.commentField {
+    height: 40px;
+    /*resize: both;*/
+
+}
+
+div.commentResponse {
+    display: none;
 }

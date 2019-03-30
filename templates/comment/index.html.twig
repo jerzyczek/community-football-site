@@ -21,8 +21,8 @@
                 <td>{{ comment.content }}</td>
                 <td>{{ comment.reactions ? comment.reactions|json_encode : '' }}</td>
                 <td>
-                    <a href="{{ path('comment_show', {'id': comment.id}) }}">show</a>
-                    <a href="{{ path('comment_edit', {'id': comment.id}) }}">edit</a>
+                    <a href="{{ path('comment_show', {'id': comment.id, 'postId': app.request.get('postId'), 'groupId' : app.request.get('groupId')}) }}">show</a>
+                    <a href="{{ path('comment_edit', {'id': comment.id, 'postId': app.request.get('postId'), 'groupId' : app.request.get('groupId')}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -33,5 +33,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('comment_new') }}">Create new</a>
+    <a href="{{ path('comment_new', {'postId': app.request.get('postId'), 'groupId' : app.request.get('groupId')}) }}">Create new</a>
 {% endblock %}

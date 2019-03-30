@@ -2,10 +2,10 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">{{ group.name }}</h1>
 </div>
-<div class="row">
+<div class="row groupItem" data-groupId = {{ group.id }}>
     {%  if group.getPosts()|length > 0 %}
         {% for post in group.getPosts() %}
-            <div class="col-md-12  no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col-md-12 no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative postItem" data-postid="{{ post.id }}">
                 <div class="row">
                     <div class="col p-4 d-flex flex-column position-static">
                         <strong class="d-inline-block mb-2 text-success">{{ post.getUser().getFullName() }}</strong>
@@ -15,29 +15,50 @@
                         <a href="#" class="stretched-link">Continue reading</a>
                     </div>
 
+                    {% if post.getComments()|length > 0 %}
                     <div class="col-md-12 no-gutter comments-list">
                         <div class="page-header">
-                            <h1>Comments<small class="float-right">45 comments</small></h1>
+                            <h1>Comments<small class="float-right">{{ post.getComments()|length }} comments</small></h1>
                         </div>
-                        <div class="row border-bottom">
-                            <div class="media p-4">
+                        {% for comment in  post.getComments()%}
+                        <div class="border-bottom comment" data-commentid="{{ comment.id }}">
+                            <div class="media px-4 pt-4">
 
-                                <a class="media-left " href="#">
-                                    <img src="http://lorempixel.com/40/40/people/1/">
+                                <a class="media-left" href="#">
+                                    <img class="rounded-circle" src="http://lorempixel.com/40/40/people/1/">
                                 </a>
                                 <div class="media-body ml-4">
-                                    <h4 class="media-heading user_name">Baltej Singh</h4>
-                                    Wow! this is really great.
+                                    <h4 class="media-heading user_name">{{ comment.getUser().getFullName() }}</h4>
 
-                                    <p><small><a href="">Like</a></small></p>
+                                    {{ comment.content }}
+                                    <p>
+                                        <small>
+                                            <a href="" class="likeComment">Like</a> -
+                                            <a href="" class="responseLink">Response</a>
+                                            <div class="dropdown ">
+                                                <a class="dropdown-toggle" data-toggle="dropdown"></a>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item commentDelete" data-toggle="modal" data-commentid="{{ comment.id }}" data-target="#deleteCommentModal">
+                                                        <i class="fa fa-trash">&nbsp;Delete</i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </small>
+                                    </p>
                                 </div>
                                 <p class="float-right"><small>5 days ago</small></p>
                             </div>
-                            <div class="col-md-12 form-group btn-group" role="group" >
-                                    <textarea class="form-control" placeholder="Enter a Comment"></textarea>
-                                {#<button type="button" class="btn btn-secondary">Left</button>#}
+                            <div class="col-md-12 form-group commentResponse" >
+                                <textarea class="form-control commentField rounded-top rounded-bottom " placeholder="Enter a Comment" ></textarea>
                             </div>
                         </div>
+                        {% endfor %}
+
+                    </div>
+                    {% endif %}
+                    <div class="col-md-12 input-group postResponse mb-3" role="group">
+                        <img class="rounded-circle" src="http://lorempixel.com/40/40/people/1/">
+                        <textarea class="form-control commentField rounded-top rounded-bottom" placeholder="Enter a Comment" ></textarea>
                     </div>
                 </div>
 
@@ -55,6 +76,31 @@
             </div>
         </div>
     {% endif %}
+</div>
+
+<div class="modal" id="deleteCommentModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Delete Comment</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                Are you sure you want to delete this comment?
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
 </div>
 
 

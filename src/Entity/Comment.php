@@ -79,6 +79,13 @@ class Comment
         return $this;
     }
 
+    public function addReaction(User $user, $reaction) : self
+    {
+        $this->reactions[] = ['user' => $user->getId(), 'reaction' => $reaction];
+
+        return $this;
+    }
+
     public function getPost(): ?Post
     {
         return $this->post;

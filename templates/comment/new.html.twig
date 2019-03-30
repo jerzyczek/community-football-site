@@ -7,5 +7,5 @@
 
     {{ include('comment/_form.html.twig') }}
 
-    <a href="{{ path('comment_index') }}">back to list</a>
+    <a href="{{ path('comment_index', {'postId': app.request.get('postId'), 'groupId' : app.request.get('groupId')}) }}">back to list</a>
 {% endblock %}

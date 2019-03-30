@@ -94,24 +94,79 @@ Home Page
 
         $(document).on('click', 'a.groupViewLink', function () {
 
-            ajaxCall($(this).data('groupid'));
-        });
-
-
-        $(document).ready(function () {
-
-        });
-
-        function ajaxCall(groupId) {
-
-            console.log(groupId);
-            $.ajax({
-                type: "GET",
-                url: "group/"+groupId+"/groupView",  //group.id
-                success: function (data) {
-                    $('#mainView').html(data);
-                }
+            var groupId = $(this).data('groupid');
+            jQueryActions.ajaxCall("group/"+groupId+"/groupView", false, false, function (data) {
+                $('#mainView').html(data);
             });
+        });
+
+        console.log('jere');
+
+        $(document).on('keypress', '.commentField', function (event) {
+
+            if(event.which == 13 && !event.shiftKey)
+            {
+                event.preventDefault();
+                var value = jQuery.trim($(this).val());
+                if(value === '')
+                {
+                    return;
+                }
+                var postid = $(this).closest('.postItem').data('postid');
+                var groupid = $(this).closest('.groupItem').data('groupid');
+                var url = '/group/' + groupid + '/post/' + postid + '/comment/newAjax';
+
+                jQueryActions.ajaxCall(url, 'POST', {content: value}, function (data) {
+                    $('.comments-list').append(data);
+                });
+
+            }
+        });
+
+        $(document).on('click', 'a.likeComment', function (event) {
+            event.preventDefault();
+            jQueryActions.likeComment($(this));
+        });
+
+        $(document).on('click', 'a.responseLink', function (event) {
+            event.preventDefault();
+            var commentResponse = $(this).parents('.comment').children('.commentResponse');
+            jQueryActions.toggle(commentResponse);
+        });
+        
+        $(document).on('click', 'a.commentDelete', function (event) {
+
+        });
+
+        var jQueryActions = {
+            ajaxCall : function (url, method, data, callback)
+            {
+                $.ajax({
+                    type: method || "GET",
+                    data: data || {},
+                    url: url,
+                    success: callback
+                });
+            },
+            toggle: function (element) {
+                element.toggle('slow');
+            },
+            likeComment: function (element) {
+
+                var commentid = element.closest('.comment').data('commentid');
+                var url = '/comment/' + commentid + '/like';
+                this.ajaxCall(url, 'POST', {id: commentid}, function (data) {
+                    console.log(data);
+                });
+            },
+            deleteComment: function (element) {
+                
+            }
+            
+            
         }
+
+
+
     </script>
 {% endblock %}
