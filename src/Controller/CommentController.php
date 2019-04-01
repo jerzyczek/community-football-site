@@ -105,6 +105,20 @@ class CommentController extends AbstractController
     }
 
     /**
+     * @Route("/comment/{id}/ajax", name="comment_delete_ajax", methods={"DELETE"})
+     */
+    public function deleteAjax(Request $request, Comment $comment): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($comment);
+            $entityManager->flush();
+        }
+
+        return JsonResponse::create('deleted');
+    }
+
+    /**
      * @Route("group/{groupId}/post/{postId}/comment/newAjax", name="comment_new", methods={"POST"})
      */
     public function newAjax(Request $request): Response
@@ -139,6 +153,19 @@ class CommentController extends AbstractController
         $entityManager->flush();
 
         return JsonResponse::create('added');
+    }
 
+    /**
+     * @Route("/comment/{id}/unlike", name="comment_like", methods={"POST"})
+     */
+    public function unlikeAction(Request $request, Comment $comment): Response
+    {
+        $comment->removeReaction($this->getUser(), 'like');
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($comment);
+        $entityManager->flush();
+
+        return JsonResponse::create('added');
     }
 }

@@ -19,3 +19,8 @@ textarea.form-control.commentField {
 div.commentResponse {
     display: none;
 }
+
+.comments-list .comment .media .dropdown
+{
+    display: inline;
+}

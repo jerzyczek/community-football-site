@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Comment
 {
@@ -44,6 +45,16 @@ class Comment
      * @ORM\Column(type="json_array", nullable=true)
      */
     private $reactions;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
     public function __construct()
     {
@@ -82,6 +93,19 @@ class Comment
     public function addReaction(User $user, $reaction) : self
     {
         $this->reactions[] = ['user' => $user->getId(), 'reaction' => $reaction];
+
+        return $this;
+    }
+
+    public function removeReaction(User $user, $reaction) : self
+    {
+        foreach ($this->reactions as $key => $rowReaction)
+        {
+            if($rowReaction['user'] == $user->getId() && $rowReaction['reaction'] == $reaction)
+            {
+                unset($this->reactions[$key]);
+            }
+        }
 
         return $this;
     }
@@ -141,5 +165,55 @@ class Comment
         return $this;
     }
 
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
 
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function isUserLikeComment(User $user)
+    {
+        foreach ($this->reactions as $reaction)
+        {
+            if($reaction['user'] === $user->getId())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Gets triggered only on insert
+
+     * @ORM\PrePersist
+     */
+    public function updatedTimestamps() : void
+    {
+        $this->updatedAt = new \DateTime("now");
+        if($this->createdAt === null)
+        {
+            $this->createdAt = new \DateTime("now");
+        }
+
+    }
 }
