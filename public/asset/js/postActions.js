@@ -42,15 +42,16 @@ var post = {
         var commentid = element.closest('.comment').data('commentid');
         var url = '/comment/' + commentid + '/like';
         this.ajaxCall(url, 'POST', {id: commentid}, function (data) {
-            console.log(data);
+            $('#commentid' + commentid).html(data);
         });
+
     },
     unlikeComment: function (element) {
 
         var commentid = element.closest('.comment').data('commentid');
         var url = '/comment/' + commentid + '/unlike';
         this.ajaxCall(url, 'POST', {id: commentid}, function (data) {
-            console.log(data);
+            $('#commentid' + commentid).html(data);
         });
     },
     deleteComment: function (element) {
@@ -66,6 +67,8 @@ var post = {
             console.log('here');
             console.log(data);
         });
+
+        $('#commentid' + commentid).remove();
 
     }
 }
@@ -104,4 +107,10 @@ $(document).on('click', 'a.commentDelete', function (event) {
 
 $(document).on('click', '.modal button[type="submit"]', function () {
     post.deleteComment(this);
+});
+
+$(document).on('click', '.showMoreComments', function (event) {
+    event.preventDefault();
+    var element = $(this).parent('comments-list');
+    console.log(element);
 });

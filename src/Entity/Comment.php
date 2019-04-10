@@ -59,6 +59,7 @@ class Comment
     public function __construct()
     {
         $this->commentReplies = new ArrayCollection();
+        $this->reactions = [];
     }
 
     public function getId(): ?int

@@ -20,37 +20,37 @@
                         <div class="page-header">
                             <h1>Comments<small class="float-right">{{ post.getComments()|length }} comments</small></h1>
                         </div>
-                        {% for comment in  post.getComments()%}
-                        <div class="border-bottom comment" data-commentid="{{ comment.id }}">
+                        {% for key, comment in post.getComments()%}
+                        <div class="border-bottom comment {% if key >= 2  %}extraComments{% endif %}"
+                             id="commentid{{ comment.id }}" data-commentid="{{ comment.id }}">
                             <div class="media px-4 pt-4">
 
-                                <a class="media-left" href="#">
+                                <a class="media-left">
                                     <img class="rounded-circle" src="http://lorempixel.com/40/40/people/1/">
                                 </a>
                                 <div class="media-body ml-4">
                                     <h4 class="media-heading user_name">{{ comment.getUser().getFullName() }}</h4>
 
                                     <p class="text-body flex-md-wrap">{{ comment.content }}</p>
-                                        <small>
-                                            {% if comment.isUserLikeComment(app.user) %}
-                                                <a href="" class="unlikeComment">Unlike</a>
-                                            {% else %}
-                                                <a href="" class="likeComment">Like</a>
-                                            {% endif %}
-                                            ({{ comment.reactions|length }}) -
-                                            <a href="" class="responseLink">Response</a>&nbsp;
-                                        </small>
-                                            {% if comment.user.getId() == app.user.getId() %}
-                                                <div class="dropdown">
-                                                    <a class="dropdown-toggle" data-toggle="dropdown"></a>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item commentDelete" data-toggle="modal" data-commentid="{{ comment.id }}" data-commenttoken="{{ csrf_token('delete' ~ comment.id) }}" data-target="#deleteCommentModal">
-                                                            <i class="fa fa-trash">&nbsp;Delete</i>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            {% endif %}
-
+                                    <small class="commentActions">
+                                        {% if comment.isUserLikeComment(app.user) %}
+                                            <a class="unlikeComment" ><i class="fa fa-thumbs-down"></i></a>
+                                        {% else %}
+                                            <a class="likeComment"><i class="fa fa-thumbs-up"></i></a>
+                                        {% endif %}
+                                        <b>{{ comment.reactions|length }}</b> -
+                                        <a href="" class="responseLink">Response</a>&nbsp;
+                                    </small>
+                                    {% if comment.user.getId() == app.user.getId() %}
+                                        <div class="dropdown">
+                                            <a class="dropdown-toggle" data-toggle="dropdown"></a>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item commentDelete" data-toggle="modal" data-commentid="{{ comment.id }}" data-commenttoken="{{ csrf_token('delete' ~ comment.id) }}" data-target="#deleteCommentModal">
+                                                    <i class="fa fa-trash">&nbsp;Delete</i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    {% endif %}
                                 </div>
                                 <p class="float-right"><small>5 days ago</small></p>
                             </div>
@@ -58,6 +58,7 @@
                                 <textarea class="form-control commentField rounded-top rounded-bottom " placeholder="Enter a Comment" ></textarea>
                             </div>
                         </div>
+                        {% if key == 1  %}<a href="#" class="showMoreComments">Show More</a> {% endif %}
                         {% endfor %}
 
                     </div>

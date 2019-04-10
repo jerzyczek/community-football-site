@@ -133,9 +133,6 @@ class CommentController extends AbstractController
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
-
         return $this->render('comment/singleCommentView.html.twig', [
             'comment' => $comment
         ]);
@@ -152,11 +149,13 @@ class CommentController extends AbstractController
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        return JsonResponse::create('added');
+        return $this->render('comment/singleCommentView.html.twig', [
+            'comment' => $comment
+        ]);
     }
 
     /**
-     * @Route("/comment/{id}/unlike", name="comment_like", methods={"POST"})
+     * @Route("/comment/{id}/unlike", name="comment_unlike", methods={"POST"})
      */
     public function unlikeAction(Request $request, Comment $comment): Response
     {
@@ -166,6 +165,8 @@ class CommentController extends AbstractController
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        return JsonResponse::create('added');
+        return $this->render('comment/singleCommentView.html.twig', [
+            'comment' => $comment
+        ]);
     }
 }

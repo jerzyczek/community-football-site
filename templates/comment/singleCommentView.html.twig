@@ -1,15 +1,32 @@
-<div class="border-bottom comment">
+<div class="border-bottom comment" id="commentid{{ comment.id }}" data-commentid="{{ comment.id }}">
     <div class="media px-4 pt-4">
 
         <a class="media-left" href="#">
-            <img class="rounded-circle" src="http://lorempixel.com/40/40/people/1/">
+            <img class="rounded-circle user-image" src="http://lorempixel.com/40/40/people/1/">
         </a>
         <div class="media-body ml-4">
             <h4 class="media-heading user_name">{{ comment.getUser().getFullName() }}</h4>
 
-            {{ comment.content }}
-
-            <p><small><a href="">Like</a> - <a href="" class="responseLink">Response</a></small></p>
+            <p class="text-body flex-md-wrap">{{ comment.content }}</p>
+            <small class="commentActions">
+                {% if comment.isUserLikeComment(app.user) %}
+                    <a class="unlikeComment" ><i class="fa fa-thumbs-down"></i></a>
+                {% else %}
+                    <a class="likeComment"><i class="fa fa-thumbs-up"></i></a>
+                {% endif %}
+                <b>{{ comment.reactions|length }}</b> -
+                <a href="" class="responseLink">Response</a>&nbsp;
+            </small>
+            {% if comment.user.getId() == app.user.getId() %}
+                <div class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown"></a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item commentDelete" data-toggle="modal" data-commentid="{{ comment.id }}" data-commenttoken="{{ csrf_token('delete' ~ comment.id) }}" data-target="#deleteCommentModal">
+                            <i class="fa fa-trash">&nbsp;Delete</i>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
         <p class="float-right"><small>5 days ago</small></p>
     </div>
