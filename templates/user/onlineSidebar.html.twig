@@ -1,0 +1,20 @@
+{% for user in users %}
+    <li class="nav-item row">
+        {#<a class="nav-link m-0 p-0">#}
+        <span class="col-sm-8 pr-1 pl-3 d-block">
+
+            <span data-feather="file-text"></span>
+            {{ user.getFullName() }}
+
+        </span>
+        <span class="col-sm-4 m-0 p-0 pr-3 text-right d-block">
+            {% if user.isActive() %}
+                <span class="dot bg-success "></span>
+            {% else %}
+                {{ user.getLastActivityAtShort() }}
+            {% endif %}
+        </span>
+        {#</a>#}
+        </li>
+{% endfor %}
+

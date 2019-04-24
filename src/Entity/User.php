@@ -67,6 +67,8 @@ class User implements UserInterface, \Serializable
 
     private $oldPassword;
 
+
+
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Group", mappedBy="user")
      */
@@ -81,6 +83,11 @@ class User implements UserInterface, \Serializable
      * @ORM\ManyToMany(targetEntity="App\Entity\Group", mappedBy="members")
      */
     private $groupsMember;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastActivityAt;
 
     public function __construct()
     {
@@ -343,6 +350,59 @@ class User implements UserInterface, \Serializable
 
     public function __toString ()
     {
-        return "asd";
+        return "toStringMethod";
+    }
+
+    public function getLastActivityAt(): ?\DateTimeInterface
+    {
+        return $this->lastActivityAt;
+    }
+
+    public function setLastActivityAt(?\DateTimeInterface $lastActivityAt): self
+    {
+        $this->lastActivityAt = $lastActivityAt;
+
+        return $this;
+    }
+
+    public function isActive()
+    {
+        if(!($this->getLastActivityAt() instanceof \DateTimeInterface))
+        {
+            return false;
+        }
+
+        $currentDate = new \DateTime();
+
+        return $this->getLastActivityAt()->getTimestamp() + 120 > $currentDate->getTimestamp();
+    }
+
+    public function getLastActivityAtShort() : string
+    {
+        $map = [
+            'y' => 'year',
+            'm' => 'month',
+            'd' => 'day',
+            'h' => 'hour',
+            'i' => 'min',
+            's' => 'sec'
+        ];
+        if(!($this->getLastActivityAt() instanceof \DateTimeInterface))
+        {
+            return "";
+        }
+
+
+        $diffrence = $this->getLastActivityAt()->diff(new \DateTime());
+        foreach ($map as $key => $desc)
+        {
+            if($amount = $diffrence->$key > 0)
+            {
+                $description = $amount > 1 ? "{$desc}s" : $desc;
+
+                return "$amount $description";
+            }
+        }
+        return "";
     }
 }

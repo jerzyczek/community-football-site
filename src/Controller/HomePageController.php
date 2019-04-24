@@ -14,8 +14,9 @@ class HomePageController extends AbstractController
      */
     public function index()
     {
-        if($this->getUser())
+        if($user = $this->getUser())
         {
+            $this->logUserAction();
             return $this->redirectToRoute('dashboard');
         }
         return $this->render('home_page.html.twig');
@@ -26,6 +27,19 @@ class HomePageController extends AbstractController
      */
     public function dashboard()
     {
+        $this->logUserAction();
         return $this->render('dashboard_page.html.twig');
+    }
+
+    private function logUserAction()
+    {
+
+        if($user = $this->getUser())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $user->setLastActivityAt(new \DateTime());
+            $em->persist($user);
+            $em->flush();
+        }
     }
 }
