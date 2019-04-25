@@ -20,10 +20,13 @@ class GroupController extends AbstractController
     /**
      * @Route("/", name="group_index", methods={"GET"})
      */
-    public function index(GroupRepository $groupRepository): Response
+    public function index(UserRepository $userRepository): Response
     {
+        $userId = $this->getUser()->getId();
+        $userGroups = $userRepository->find($userId);
+
         return $this->render('group/index.html.twig', [
-            'groups' => $groupRepository->findAll(),
+            'groups' => $userGroups->getGroups(),
         ]);
     }
 
