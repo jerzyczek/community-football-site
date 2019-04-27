@@ -6,9 +6,11 @@ use App\Entity\Comment;
 use App\Entity\Post;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
+use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -20,10 +22,12 @@ class CommentController extends AbstractController
     /**
      * @Route("group/{groupId}/post/{postId}/comment/", name="comment_index", methods={"GET"})
      */
-    public function index(CommentRepository $commentRepository): Response
+    public function index(PostRepository $postRepository, Request $request): Response
     {
+        $comment = $postRepository->find($request->get('postId'));
+
         return $this->render('comment/index.html.twig', [
-            'comments' => $commentRepository->findAll(),
+            'comments' => $comment->getComments(),
         ]);
     }
 

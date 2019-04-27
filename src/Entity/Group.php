@@ -211,6 +211,4 @@ class Group
 
         return $this;
     }
-
-
 }

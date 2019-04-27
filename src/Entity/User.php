@@ -348,6 +348,20 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+    public function getAllMemberGroupPosts(): array
+    {
+        $newestPost = [];
+        $allNewestPosts = [];
+
+        foreach ($this->getGroupsMember() as $group){
+            foreach ($group->getPosts()->getValues() as $key=>$posts){
+                $newestPost = $posts;
+            }
+            $allNewestPosts[] = $newestPost;
+        }
+        return $allNewestPosts;
+    }
+
     public function __toString ()
     {
         return "toStringMethod";

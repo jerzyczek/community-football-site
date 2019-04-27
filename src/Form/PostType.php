@@ -6,6 +6,7 @@ use App\Entity\Post;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class PostType extends AbstractType
 {
@@ -15,6 +16,13 @@ class PostType extends AbstractType
             ->add('title')
             ->add('content')
             ->add('reactions')
+            ->add('images', FileType::class, [
+                'multiple' => true,
+                'mapped' => false,
+                'data_class' => null,
+                'required' => false,
+                'attr' => ['class' => 'input-group']
+            ])
 //            ->add('user')
 //            ->add('group')
         ;

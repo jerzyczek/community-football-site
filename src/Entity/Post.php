@@ -61,9 +61,15 @@ class Post
      */
     private $reactions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Image", mappedBy="post", cascade={"persist"})
+     */
+    private $images;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -188,7 +194,6 @@ class Post
 
     /**
      * Gets triggered only on insert
-
      * @ORM\PrePersist
      */
     public function updatedTimestamps() : void
@@ -198,6 +203,19 @@ class Post
         {
             $this->createdAt = new \DateTime("now");
         }
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getImages()
+    {
+        return $this->images;
+    }
+
+    public function setImages($images): self
+    {
+        $this->images[] = $images;
+        return $this;
     }
 }
