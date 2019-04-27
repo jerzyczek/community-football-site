@@ -28,12 +28,12 @@ class HomePageController extends AbstractController
     public function dashboard()
     {
         $this->logUserAction();
+
         return $this->render('dashboard_page.html.twig');
     }
 
     private function logUserAction()
     {
-
         if($user = $this->getUser())
         {
             $em = $this->getDoctrine()->getManager();
