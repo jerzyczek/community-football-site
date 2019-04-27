@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Group;
+use App\Entity\Image;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\GroupRepository;
@@ -45,14 +46,33 @@ class PostController extends AbstractController
             $post->setUser($this->getUser());
 
             $group = $this->getDoctrine()->getRepository(Group::class)->find($request->get('groupId'));
-            $post->setGroup($group);
-            $entityManager->persist($post);
-            $entityManager->flush();
 
+            $post->setGroup($group);
+
+            $files = $request->files->get('post')['images'];
+
+            /** @var UploadedFile $file */
+            foreach ($files as $file) {
+                $image = new Image();
+
+                $filename = md5(uniqid()) . '.' . $file->guessClientExtension();
+
+                $image->setFilename($filename);
+                $image->setPath('/asset/images/' . $filename);
+
+                $file->move($this->getParameter('image_directory'), $filename);
+
+                $image->setPost($post);
+
+                $image->setDateOfCreation(new \DateTime());
+
+                $post->setImages($image);
+
+                $entityManager->persist($post);
+                $entityManager->flush();
+            }
             return $this->redirectToRoute('post_index', ['groupId' => $request->get('groupId')]);
         }
-
-
         return $this->render('post/new.html.twig', [
             'post' => $post,
             'form' => $form->createView(),
