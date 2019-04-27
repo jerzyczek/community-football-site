@@ -25,7 +25,7 @@ var post = {
             var groupid = $(element).closest('.groupItem').data('groupid');
             var url = '/group/' + groupid + '/post/' + postid + '/comment/newAjax';
 
-            this.ajaxCall(url, 'POST', {content: value}, function (data) {
+            this.ajaxCall(url, 'POST', {content: $(element).val()}, function (data) {
                 $('.comments-list').append(data);
             });
         }
