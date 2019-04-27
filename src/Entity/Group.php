@@ -173,7 +173,6 @@ class Group
         {
             $this->createdAt = new \DateTime("now");
         }
-
     }
 
     /**
@@ -211,6 +210,4 @@ class Group
 
         return $this;
     }
-
-
 }

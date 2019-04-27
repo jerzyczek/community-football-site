@@ -198,6 +198,5 @@ class Post
         {
             $this->createdAt = new \DateTime("now");
         }
-
     }
 }
