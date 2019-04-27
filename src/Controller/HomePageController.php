@@ -32,8 +32,9 @@ class HomePageController extends AbstractController
      */
     public function index()
     {
-        if($this->getUser())
+        if($user = $this->getUser())
         {
+            $this->logUserAction();
             return $this->redirectToRoute('dashboard');
         }
         return $this->render('home_page.html.twig');
@@ -44,6 +45,7 @@ class HomePageController extends AbstractController
      */
     public function dashboard()
     {
+        $this->logUserAction();
         $user = $this->userRepository->findById($this->getUser()->getId());
 
         $groupsId = [];
@@ -78,5 +80,16 @@ class HomePageController extends AbstractController
 
     function comparator($object1, $object2) {
         return $object1->getCreatedAt() < $object2->getCreatedAt();
+    }
+
+    private function logUserAction()
+    {
+        if($user = $this->getUser())
+        {
+            $em = $this->getDoctrine()->getManager();
+            $user->setLastActivityAt(new \DateTime());
+            $em->persist($user);
+            $em->flush();
+        }
     }
 }

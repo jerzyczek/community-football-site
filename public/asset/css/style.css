@@ -45,3 +45,16 @@ div.commentResponse {
 {
     display: none;
 }
+
+.dot
+{
+    display: inline-block;
+    border-radius: 100%;
+    width: 10px;
+    height: 10px;
+}
+
+#usersOnlineSidebar .nav-item
+{
+    line-height: 1;
+}

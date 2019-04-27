@@ -41,7 +41,6 @@ Home Page
                                 </a>
                             </li>
                         {% endfor %}
-
                     </ul>
 
                     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
@@ -136,19 +135,15 @@ Home Page
                         {% endfor %}
             </main>
 
-            <aside class="col-md-2 bg-light d-md-block">
+            <aside class="col-md-2 bg-light d-md-block ">
                 <div class="sidebar-sticky">
 
-                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                        <span>Users Online</span>
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted mb-3">
+                        <span>Users</span>
                     </h6>
-                    <ul class="nav flex-column mb-2">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="file-text"></span>
-                                User 1
-                            </a>
-                        </li>
+
+                    <ul class="nav flex-column mb-2" id="usersOnlineSidebar">
+
                     </ul>
                 </div>
             </aside>
@@ -160,5 +155,6 @@ Home Page
 
 {% block javascripts %}
     <script src="{{ asset('asset/js/postActions.js') }}"></script>
+    <script src="{{ asset('asset/js/usersOnline.js') }}"></script>
 
 {% endblock %}
