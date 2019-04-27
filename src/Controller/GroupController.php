@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Group;
+use App\Entity\Post;
 use App\Entity\User;
 use App\Form\GroupType;
+use App\Form\PostType;
 use App\Repository\GroupRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -48,7 +50,6 @@ class GroupController extends AbstractController
 
             return $this->redirectToRoute('group_index');
         }
-
 
         return $this->render('group/new.html.twig', [
             'group' => $group,
@@ -108,8 +109,13 @@ class GroupController extends AbstractController
     public function getGroupUserView(Request $request)
     {
         $group = $this->getDoctrine()->getRepository(Group::class)->find($request->get('id'));
+
+        $post = new Post();
+        $form = $this->createForm(PostType::class, $post);
+
         return $this->render('group/mainGroup.html.twig', [
-            'group' => $group
+            'group' => $group,
+            'form' => $form->createView()
         ]);
     }
 }

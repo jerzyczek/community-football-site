@@ -48,6 +48,7 @@ class Group
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Post", mappedBy="group")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     private $posts;
 
