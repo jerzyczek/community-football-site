@@ -49,9 +49,9 @@ Home Page
                         </a>
                     </h6>
                     <ul class="nav flex-column mb-2">
-                        {% for post in app.user.getAllMemberGroupPosts() %}
+                        {% for post in newestPosts %}
                         <li class="nav-item">
-                            <a class="nav-link active groupViewLink" href="#" data-groupId="{{ post.getGroup().getId() }}">
+                            <a class="nav-link active lastCommentViewLink" href="#" data-postId="{{ post.getId() }}" data-groupId="{{ post.getGroup().getId() }}">
                                 <span data-feather="home"></span>
                                 {{ post.getTitle() }} <span class="sr-only">(current)</span>
                             </a>

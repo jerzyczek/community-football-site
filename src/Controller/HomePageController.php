@@ -38,8 +38,11 @@ class HomePageController extends AbstractController
     {
         $posts = $this->postRepository->getAllPosts($this->getUser());
 
+        $newestPostsFromMemberGroups = $this->postRepository->getNewestPosts($this->getUser());
+
         return $this->render('dashboard_page.html.twig', [
-            'posts' => $posts
+            'posts' => $posts,
+            'newestPosts' => $newestPostsFromMemberGroups
         ]);
     }
 

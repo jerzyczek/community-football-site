@@ -35,4 +35,28 @@ class PostRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
+    //get newest posts from every member group
+    public function getNewestPosts(User $user)
+    {
+        $expr = $this->getEntityManager()->getExpressionBuilder();
+        $qb = $this->createQueryBuilder('p');
+        $em = $this->getEntityManager();
+        $qb->select('p')
+            ->innerJoin('p.group', 'g', 'p.group=g.id')
+            ->innerJoin('g.members', 'gu', 'g.id = gu.group_id')
+            ->where($expr->in(
+                'p.createdAt',
+                $em->createQueryBuilder()
+                    ->select($expr->max('p2.createdAt'))
+                    ->from(Post::class, 'p2')
+                    ->groupBy('p2.group')
+                    ->getDQL()
+            ))
+        ->andWhere('gu.id = :id');
+
+        $qb->setParameter('id', $user->getId());
+        $query = $qb->getQuery();
+
+        return $query->getResult();
+    }
 }

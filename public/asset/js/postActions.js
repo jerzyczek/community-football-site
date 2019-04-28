@@ -70,6 +70,14 @@ var post = {
 
         $('#commentid' + commentid).remove();
 
+    },
+    generateLastCommentGroupView: function (element) {
+        var postId = $(element).data('postid');
+        var groupId = $(element).data('groupid');
+
+        this.ajaxCall("group/"+groupId+"/post/"+postId+"/postView", false, false, function (data) {
+            //$('#mainView').html(data);
+        });
     }
 }
 
@@ -113,4 +121,8 @@ $(document).on('click', '.showMoreComments', function (event) {
     event.preventDefault();
     var element = $(this).parent('comments-list');
     console.log(element);
+});
+
+$(document).on('click', 'a.lastCommentViewLink', function (event) {
+    post.generateLastCommentGroupView(this)
 });

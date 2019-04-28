@@ -124,4 +124,15 @@ class PostController extends AbstractController
 
         return $this->redirectToRoute('post_index');
     }
+
+    /**
+     * @Route("/{id}/postView", name="post_client_main", methods={"GET"})
+     */
+    public function getPostUserView(Request $request)
+    {
+        $post = $this->getDoctrine()->getRepository(Post::class)->find($request->get('id'));
+
+        dump($post);
+        die;
+    }
 }
