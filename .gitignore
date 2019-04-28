@@ -18,3 +18,5 @@
 ###< symfony/web-server-bundle ###
 .idea
 /public/asset/images
+
+/config/packages/doctrine.yaml
