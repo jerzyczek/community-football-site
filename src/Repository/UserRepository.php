@@ -27,4 +27,11 @@ class UserRepository extends ServiceEntityRepository
             ->setParameter('id', $user->getId())
             ->orderBy('p.firstname', 'ASC');
     }
+
+    public function getUsersByIdsIndexed(array $ids = [])
+    {
+        $query =  $this->createQueryBuilder('p', 'p.id');
+
+        return $query->where($query->expr()->in('p.id', $ids))->getQuery()->getResult();
+    }
 }

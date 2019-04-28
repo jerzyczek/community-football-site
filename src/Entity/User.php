@@ -389,20 +389,21 @@ class User implements UserInterface, \Serializable
             'i' => 'min',
             's' => 'sec'
         ];
+
         if(!($this->getLastActivityAt() instanceof \DateTimeInterface))
         {
             return "";
         }
 
-
         $diffrence = $this->getLastActivityAt()->diff(new \DateTime());
         foreach ($map as $key => $desc)
         {
-            if($amount = $diffrence->$key > 0)
+            $desc = ucfirst($desc);
+            if($diffrence->$key > 0)
             {
-                $description = $amount > 1 ? "{$desc}s" : $desc;
+                $description = (int) $diffrence->$key > 1 ? "{$desc}s" : $desc;
 
-                return "$amount $description";
+                return "{$diffrence->$key} $description";
             }
         }
         return "";

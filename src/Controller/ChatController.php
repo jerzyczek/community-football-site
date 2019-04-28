@@ -48,10 +48,18 @@ class ChatController extends AbstractController
         }
 
         $chat = $chat ?? $messageHistory->getSingleResult();
+        $users = $this->getDoctrine()->getRepository(User::class)->getUsersByIdsIndexed([$chat->getUser1(), $chat->getUser2()]);
 
+        $newMessages = [];
+        foreach ($chat->getMessages() as $message)
+        {
+            $message['user'] = $users[$message['user']];
+            $newMessages[] = $message;
+        }
+        $chat->setMessages($newMessages);
         return $this->render('chat/history.html.twig', [
             'chat' => $chat,
-            'messages' => $chat->getMessages(),
+            'targetuserid' => $user2,
         ]);
     }
 
@@ -71,6 +79,9 @@ class ChatController extends AbstractController
 
         $em->flush();
 
-        return new JsonResponse(['added' => true, 'userid' => $this->getUser()->getId()]);
+        return new JsonResponse([
+            'added' => true,
+            'targetuserid' => $request->get('targetuserid')
+        ]);
     }
 }

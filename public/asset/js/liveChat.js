@@ -1,6 +1,8 @@
 
 var liveChat = {
 
+    lastUserId: null,
+
     ajaxCall : function (url, method, data, callback)
     {
         $.ajax({
@@ -25,18 +27,19 @@ var liveChat = {
 
             var data = {
                 chatid: chatid,
-                message: $(element).val()
+                message: $(element).val(),
+                targetuserid: chatBox.data('targetuserid'),
             };
             self = this;
             this.ajaxCall("/chat/message/add", 'POST', data, function (data) {
-                self.getHistory(data.userid);
+                self.getHistory(data.targetuserid);
             });
 
         }
     },
-    getHistory: function (userid, event) {
+    getHistory: function (event) {
         var data = {
-            userId: userid
+            userId: this.lastUserId
         };
 
         this.ajaxCall( '/chat/history', 'GET', data, function (data) {
@@ -50,9 +53,16 @@ var liveChat = {
     },
 };
 $(document).on('click', '.sidebarUser', function (event) {
-    liveChat.getHistory($(this).data('userid'), event);
+    liveChat.lastUserId = $(this).data('userid');
+
+    liveChat.getHistory(event);
+    setInterval(function() {
+        liveChat.getHistory();
+    }, 1000);
+
 });
 
 $(document).on('keypress', '.chatMessage', function (event) {
     liveChat.addMessage(this, event);
 });
+
