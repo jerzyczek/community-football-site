@@ -9,10 +9,10 @@ doctrine:
     dbal:
         # configure these for your database server
         dbname: football-community
-        host: localost
+        host: database-community-football-site
         port: 3306
         user: root
-        password: zaq1@WSXcde3
+        password: root
         driver: 'pdo_mysql'
         server_version: '5.7'
         charset: utf8mb4
@@ -20,7 +20,7 @@ doctrine:
             charset: utf8mb4
             collate: utf8mb4_unicode_ci
 
-        url: mysql://root:zaq1@WSXcde3@localhost:3306/football-community
+        url: mysql://root:root@database-community-football-site:3306/football-community
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore

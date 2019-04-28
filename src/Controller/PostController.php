@@ -51,26 +51,30 @@ class PostController extends AbstractController
 
             $files = $request->files->get('post')['images'];
 
-            /** @var UploadedFile $file */
-            foreach ($files as $file) {
-                $image = new Image();
+            if(!empty($files))
+            {
+                /** @var UploadedFile $file */
+                foreach ($files as $file) {
+                    $image = new Image();
 
-                $filename = md5(uniqid()) . '.' . $file->guessClientExtension();
+                    $filename = md5(uniqid()) . '.' . $file->guessClientExtension();
 
-                $image->setFilename($filename);
-                $image->setPath('/asset/images/' . $filename);
+                    $image->setFilename($filename);
+                    $image->setPath('/asset/images/' . $filename);
 
-                $file->move($this->getParameter('image_directory'), $filename);
+                    $file->move($this->getParameter('image_directory'), $filename);
 
-                $image->setPost($post);
+                    $image->setPost($post);
 
-                $image->setDateOfCreation(new \DateTime());
+                    $image->setDateOfCreation(new \DateTime());
 
-                $post->setImages($image);
-
-                $entityManager->persist($post);
-                $entityManager->flush();
+                    $post->setImages($image);
+                }
             }
+
+            $entityManager->persist($post);
+            $entityManager->flush();
+
             return $this->redirectToRoute('post_index', ['groupId' => $request->get('groupId')]);
         }
         return $this->render('post/new.html.twig', [
