@@ -58,3 +58,28 @@ div.commentResponse {
 {
     line-height: 1;
 }
+
+.chatBox
+{
+    padding: 0px;
+}
+
+#chatView
+{
+    padding: 0 !important;
+
+    height: 350px;
+    width: 100%;
+    overflow-y: scroll;
+    /*background-color: #4e555b;*/
+}
+
+.sidebarUser
+{
+    cursor: pointer;
+}
+
+.sidebarUser:hover
+{
+    color: darkgray;;
+}

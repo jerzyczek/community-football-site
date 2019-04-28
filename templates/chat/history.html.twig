@@ -1,0 +1,16 @@
+
+<div id="chatBox" class="row chatBox jumbotron bg-dark">
+    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted mb-3">
+        <span>CHAT BOX</span>
+    </h6>
+    <div id="chatView" class="chatView jumbotron p-4 p-md-5 text-white rounded m-2" data-chatid="{{ chat.getId() }}">
+        {% for message in messages %}
+            <div class="chatMessage d-inline-block col-md-12">
+                <span class="card-title text-success">{{ message.user }}:</span>
+                <span class="text-warning">{{ message.message }}</span>
+            </div>
+        {% endfor %}
+    </div>
+    <input id="chatMessage" class="form-control chatMessage" placeholder="Message..." type="text"/>
+</div>
+

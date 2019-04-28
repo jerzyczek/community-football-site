@@ -365,6 +365,8 @@ class User implements UserInterface, \Serializable
         return $this;
     }
 
+
+
     public function isActive()
     {
         if(!($this->getLastActivityAt() instanceof \DateTimeInterface))

@@ -132,9 +132,10 @@ Home Page
                                 </div>
                             </div>
                         {% endfor %}
+                </div>
             </main>
 
-            <aside class="col-md-2 bg-light d-md-block ">
+            <aside class="col-md-2 bg-light d-md-block" id="asideBarRight">
                 <div class="sidebar-sticky">
 
                     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted mb-3">
@@ -155,5 +156,5 @@ Home Page
 {% block javascripts %}
     <script src="{{ asset('asset/js/postActions.js') }}"></script>
     <script src="{{ asset('asset/js/usersOnline.js') }}"></script>
-
+    <script src="{{ asset('asset/js/liveChat.js') }}"></script>
 {% endblock %}
