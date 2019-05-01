@@ -1,5 +1,5 @@
 nav{
-    background-color: #1F9F55;
+    background-color: rgba(31, 114, 14, 0.9);
 }
 .user_name{
     font-size:14px;
@@ -13,8 +13,9 @@ nav{
 textarea.form-control.commentField {
     height: 40px;
     /*resize: both;*/
-
 }
+
+
 
 div.commentResponse {
     display: none;

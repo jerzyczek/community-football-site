@@ -28,7 +28,8 @@ class HomePageController extends AbstractController
             $this->logUserAction();
             return $this->redirectToRoute('dashboard');
         }
-        return $this->render('home_page.html.twig');
+        return $this->redirectToRoute('security_login');
+
     }
 
     /**
