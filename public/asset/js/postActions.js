@@ -26,7 +26,7 @@ var post = {
             var url = '/group/' + groupid + '/post/' + postid + '/comment/newAjax';
 
             this.ajaxCall(url, 'POST', {content: $(element).val()}, function (data) {
-                $('.comments-list').append(data);
+                $(element).closest('.groupItem').find(".comments-list").append(data);
             });
         }
     },
@@ -64,11 +64,10 @@ var post = {
         var callData = $("#"+ formid).serializeArray();
 
         this.ajaxCall('/comment/' + commentid + "/ajax", "DELETE", callData, function (data) {
-            console.log('here');
-            console.log(data);
+            $('#commentid' + commentid).remove();
         });
 
-        $('#commentid' + commentid).remove();
+
 
     },
     generateLastCommentGroupView: function (element) {
@@ -81,8 +80,28 @@ var post = {
     },
     addPost: function (element, event) {
         var data = $(element).serializeArray();
-        this.ajaxCall('')
         console.log(data);
+        data.push({name: "isAjax", value: true});
+
+        var groupid = $(element).find('button[type="submit"]').data('groupid');
+        this.ajaxCall("group/" + groupid + "/post/new", 'POST', data, function (data) {
+            $('.groupItem').prepend(data);
+            $("#addPostModal").modal('toggle');
+        });
+    },
+    showMoreComments: function (element, event) {
+        var element = $(element);
+        element.closest('.postItem').find('.extraComment').toggle('slow');
+        var action = element.data('action');
+        var value = 'show';
+        var text = 'Show more';
+        if(action == 'show')
+        {
+            value = 'hide';
+            text = 'Hide More';
+        }
+        element.text(text)
+        element.data('action', value);
     }
 }
 
@@ -124,8 +143,7 @@ $(document).on('click', '.modal button[type="submit"]', function () {
 
 $(document).on('click', '.showMoreComments', function (event) {
     event.preventDefault();
-    var element = $(this).parent('comments-list');
-    console.log(element);
+    post.showMoreComments(this, event);
 });
 
 $(document).on('click', 'a.lastCommentViewLink', function (event) {

@@ -1,0 +1,63 @@
+<div data-sort="{{ post.id }}" class="col-md-12 no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative postItem" data-postid="{{ post.id }}">
+    <div class="row">
+        <div class="col p-4 d-flex flex-column position-static">
+            <strong class="d-inline-block mb-2 text-success">{{ post.getUser().getFullName() }}</strong>
+            <h3 class="mb-0">{{ post.title }}</h3>
+            <div class="mb-1 text-muted">{{ post.createdAt|date('M d H:i') }}</div>
+            <p class="mb-auto">{{ post.content }}</p>
+            <a href="#" class="stretched-link">Continue reading</a>
+        </div>
+
+        {% if post.getComments()|length > 0 %}
+            <div class="col-md-12 no-gutter comments-list">
+                <div class="page-header">
+                    <h1>Comments<small class="float-right">{{ post.getComments()|length }} comments</small></h1>
+                </div>
+                {% for key, comment in post.getComments()%}
+                    <div class="border-bottom comment {% if key >= 2  %}extraComments{% endif %}"
+                         id="commentid{{ comment.id }}" data-commentid="{{ comment.id }}">
+                        <div class="media px-4 pt-4">
+
+                            <a class="media-left">
+                                <img class="rounded-circle" src="http://lorempixel.com/40/40/people/1/">
+                            </a>
+                            <div class="media-body ml-4">
+                                <h4 class="media-heading user_name">{{ comment.getUser().getFullName() }}</h4>
+
+                                <p class="text-body flex-md-wrap">{{ comment.content }}</p>
+                                <small class="commentActions">
+                                    {% if comment.isUserLikeComment(app.user) %}
+                                        <a class="unlikeComment" ><i class="fa fa-thumbs-down"></i></a>
+                                    {% else %}
+                                        <a class="likeComment"><i class="fa fa-thumbs-up"></i></a>
+                                    {% endif %}
+                                    <b>{{ comment.reactions|length }}</b> -
+                                    <a href="" class="responseLink">Response</a>&nbsp;
+                                </small>
+                                {% if comment.user.getId() == app.user.getId() %}
+                                    <div class="dropdown">
+                                        <a class="dropdown-toggle" data-toggle="dropdown"></a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item commentDelete" data-toggle="modal" data-commentid="{{ comment.id }}" data-commenttoken="{{ csrf_token('delete' ~ comment.id) }}" data-target="#deleteCommentModal">
+                                                <i class="fa fa-trash">&nbsp;Delete</i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <p class="float-right"><small>5 days ago</small></p>
+                        </div>
+                        <div class="col-md-12 form-group commentResponse" >
+                            <textarea class="form-control commentField rounded-top rounded-bottom " placeholder="Enter a Comment" ></textarea>
+                        </div>
+                    </div>
+                    {% if key == 1  %}<a href="#" class="showMoreComments">Show More</a> {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="col-md-12 input-group postResponse mb-3" role="group">
+            <img class="rounded-circle" src="http://lorempixel.com/40/40/people/1/">
+            <textarea class="form-control commentField rounded-top rounded-bottom" placeholder="Enter a Comment" ></textarea>
+        </div>
+    </div>
+</div>

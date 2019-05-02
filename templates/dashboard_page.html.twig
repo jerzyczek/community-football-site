@@ -78,13 +78,14 @@ Home Page
                                         <a href="#" class="stretched-link">Continue reading</a>
                                     </div>
 
+                                    <div class="col-md-12 no-gutter comments-list">
                                     {% if post.getComments()|length > 0 %}
-                                        <div class="col-md-12 no-gutter comments-list">
+
                                             <div class="page-header">
                                                 <h1>Comments<small class="float-right">{{ post.getComments()|length }} comments</small></h1>
                                             </div>
                                             {% for key, comment in post.getComments()%}
-                                                <div class="border-bottom comment {% if key >= 2  %}extraComments{% endif %}"
+                                                <div class="border-bottom comment {% if key >= 2  %}extraComment{% endif %}"
                                                      id="commentid{{ comment.id }}" data-commentid="{{ comment.id }}">
                                                     <div class="media px-4 pt-4">
 
@@ -121,10 +122,10 @@ Home Page
                                                         <textarea class="form-control commentField rounded-top rounded-bottom " placeholder="Enter a Comment" ></textarea>
                                                     </div>
                                                 </div>
-                                                {% if key == 1  %}<a href="#" class="showMoreComments">Show More</a> {% endif %}
                                             {% endfor %}
-                                        </div>
                                     {% endif %}
+                                    </div>
+                                    {% if post.getComments()|length > 2 %}<a href="#" class="showMoreComments" data-action="show">Show More</a> {% endif %}
                                     <div class="col-md-12 input-group postResponse mb-3" role="group">
                                         <img class="rounded-circle" src="http://lorempixel.com/40/40/people/1/">
                                         <textarea class="form-control commentField rounded-top rounded-bottom" placeholder="Enter a Comment" ></textarea>

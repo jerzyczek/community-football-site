@@ -9,9 +9,16 @@ use App\Form\PostType;
 use App\Repository\GroupRepository;
 use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Tests\Normalizer\ObjectSerializerNormalizer;
+
 
 /**
  * @Route("group/{groupId}/post")
@@ -44,14 +51,12 @@ class PostController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
 
             $post->setUser($this->getUser());
-
             $group = $this->getDoctrine()->getRepository(Group::class)->find($request->get('groupId'));
-
             $post->setGroup($group);
 
             $files = $request->files->get('post')['images'];
 
-            if(!empty($files))
+            if(!empty($files)) //TODO  tutaj jakiś serwis do tego mozna dać @mateusz
             {
                 /** @var UploadedFile $file */
                 foreach ($files as $file) {
@@ -74,7 +79,23 @@ class PostController extends AbstractController
 
             $entityManager->persist($post);
             $entityManager->flush();
+            if((bool)$request->get('isAjax') === true)
+            {
+//                $encoders = [new XmlEncoder(), new JsonEncoder()]; //jakis serwis do tego
+//                $normalizer = (new ObjectNormalizer());
+//                $normalizer->setIgnoredAttributes(array('user', 'group', 'images', 'comments', 'createdAt', 'updatedAt'));
+//                $normalizers = [$normalizer];
+//
+//                $serializer = new Serializer($normalizers, $encoders);
+//                $jsonContent = $serializer->serialize($post, 'json');
+//
+//                return JsonResponse::fromJsonString($jsonContent);
 
+                return $this->render("post/singlePost.html.twig", [
+                    'post' => $post,
+                ]);
+
+            }
             return $this->redirectToRoute('post_index', ['groupId' => $request->get('groupId')]);
         }
         return $this->render('post/new.html.twig', [
@@ -86,9 +107,9 @@ class PostController extends AbstractController
     /**
      * @Route("/{id}", name="post_show", methods={"GET"})
      */
-    public function show(Post $post): Response
+    public function show(Post $post, Request $request): Response
     {
-        return $this->render('post/show.html.twig', [
+        return $this->render("post/show.html.twig", [
             'post' => $post,
         ]);
     }
