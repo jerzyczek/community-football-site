@@ -72,6 +72,7 @@ div.commentResponse {
     height: 350px;
     width: 100%;
     overflow-y: scroll;
+    overflow-wrap: break-word;
     /*background-color: #4e555b;*/
 }
 

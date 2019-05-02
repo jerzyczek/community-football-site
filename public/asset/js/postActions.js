@@ -78,6 +78,11 @@ var post = {
         this.ajaxCall("group/"+groupId+"/post/"+postId+"/postView", false, false, function (data) {
             //$('#mainView').html(data);
         });
+    },
+    addPost: function (element, event) {
+        var data = $(element).serializeArray();
+        this.ajaxCall('')
+        console.log(data);
     }
 }
 
@@ -125,4 +130,9 @@ $(document).on('click', '.showMoreComments', function (event) {
 
 $(document).on('click', 'a.lastCommentViewLink', function (event) {
     post.generateLastCommentGroupView(this)
+});
+
+$(document).on('submit', 'form[name="post"]', function (event) {
+    event.preventDefault();
+    post.addPost(this, event);
 });

@@ -28,8 +28,8 @@ class HomePageController extends AbstractController
             $this->logUserAction();
             return $this->redirectToRoute('dashboard');
         }
-        return $this->redirectToRoute('security_login');
 
+        return $this->redirectToRoute('security_login');
     }
 
     /**
@@ -37,8 +37,12 @@ class HomePageController extends AbstractController
      */
     public function dashboard()
     {
+        if(!$this->getUser())
+        {
+            return $this->redirectToRoute('security_login');
+        }
+        $this->logUserAction();
         $posts = $this->postRepository->getAllPosts($this->getUser());
-
         $newestPostsFromMemberGroups = $this->postRepository->getNewestPosts($this->getUser());
 
         return $this->render('dashboard_page.html.twig', [

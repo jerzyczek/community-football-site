@@ -73,7 +73,8 @@ class Chat
         return $this;
     }
 
-    public function addMessage($userId, $message): self
+
+    public function addMessage($userId, $message): self //jakiś obiekt tu można zrobić
     {
 
         $this->messages[] = [

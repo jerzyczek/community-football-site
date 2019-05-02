@@ -2,6 +2,9 @@
 var liveChat = {
 
     lastUserId: null,
+    chatMessagesHtmlId: 'chatView',
+    chatBoxHtmlId: 'chatBox',
+    refreshing: false,
 
     ajaxCall : function (url, method, data, callback)
     {
@@ -22,24 +25,24 @@ var liveChat = {
                 return;
             }
             var chatBox = $(element).prev('.chatView');
-
-            var chatid = chatBox.data('chatid');
-
             var data = {
-                chatid: chatid,
                 message: $(element).val(),
+                chatid: chatBox.data('chatid'),
                 targetuserid: chatBox.data('targetuserid'),
             };
             self = this;
             this.ajaxCall("/chat/message/add", 'POST', data, function (data) {
-                self.getHistory(data.targetuserid);
+                self.refresh();
+                $(element).val('');
             });
-
         }
     },
-    getHistory: function (event) {
+    getHistory: function (element, event) {
+        var self = this;
+
+        self.lastUserId = $(element).data('userid');
         var data = {
-            userId: this.lastUserId
+            userId: self.lastUserId
         };
 
         this.ajaxCall( '/chat/history', 'GET', data, function (data) {
@@ -49,20 +52,55 @@ var liveChat = {
                 $('#chatBox').remove();
             }
             sideBar.append(data);
+            self.refresh(event);
+            self.scrollToBottom(event);
+            self.refreshing = true;
         });
+
     },
+    refresh: function (event) {
+        self = this;
+        var chatid = $('#'+ self.chatMessagesHtmlId).data('chatid')
+        var data = {
+            chatid: chatid
+        };
+
+        this.ajaxCall( '/chat/refresh', 'GET', data, function (data) {
+            $('#'+ self.chatMessagesHtmlId).html(data);
+            self.scrollToBottom(event);
+        });
+
+
+    },
+    scrollToBottom: function (event) {
+        var self = this;
+        var chatView = $('#'+ self.chatMessagesHtmlId);
+        chatView.scrollTop(chatView.prop("scrollHeight"));
+    },
+    // loadingOnScroll: function () {} //futureva
+    closeChatBox: function (element, event) {
+        var self = this;
+        this.lastUserId = null;
+        this.refreshing = false;
+        $('#'+ self.chatBoxHtmlId).remove();
+    }
 };
 $(document).on('click', '.sidebarUser', function (event) {
-    liveChat.lastUserId = $(this).data('userid');
 
-    liveChat.getHistory(event);
+    liveChat.getHistory(this, event);
     setInterval(function() {
-        liveChat.getHistory();
-    }, 1000);
-
+        if(liveChat.refreshing === true)
+        {
+            liveChat.refresh(event);
+        }
+    }, 10000);
 });
 
 $(document).on('keypress', '.chatMessage', function (event) {
     liveChat.addMessage(this, event);
+});
+
+$(document).on('click', '.closeChatbox', function (event) {
+    liveChat.closeChatBox(this, event)
 });
 

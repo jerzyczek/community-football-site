@@ -1,0 +1,6 @@
+{% for message in chat.messages %}
+    <div class="chatMessage d-inline-block col-md-12">
+        <span class="d-inline-block  text-success" data-toggle="tooltip" data-placement="right" title="{{ message.date|date('M d H:i:s') }}">{{ message.user.getFullName() }}</span>
+        <span class="text-warning">{{ message.message }}</span>
+    </div>
+{% endfor %}

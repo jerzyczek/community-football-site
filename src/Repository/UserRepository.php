@@ -34,4 +34,12 @@ class UserRepository extends ServiceEntityRepository
 
         return $query->where($query->expr()->in('p.id', $ids))->getQuery()->getResult();
     }
+
+    public function getAllWithoutLogged(User $user)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.id != :id')
+            ->setParameter('id', $user->getId())
+            ->getQuery()->getResult();
+    }
 }

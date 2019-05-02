@@ -4,19 +4,33 @@ namespace App\Controller;
 
 use App\Entity\Chat;
 use App\Entity\User;
+use App\Repository\ChatRepository;
 use App\Repository\PostRepository;
+use \Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Validator\Exception\ValidatorException;
 
 /**
  *
  */
 class ChatController extends AbstractController
 {
+    /**
+     * @var ChatRepository
+     */
+    private $chatRepository;
+
+    public function __construct (ChatRepository $chatRepository)
+    {
+        $this->chatRepository = $chatRepository;
+    }
+
     /**
      * @Route("group/{groupId}/post/{postId}/comment/", name="comment_index", methods={"GET"})
      */
@@ -32,7 +46,7 @@ class ChatController extends AbstractController
     /**
      * @Route("chat/history", name="chat_history", methods={"GET"})
      */
-    public function getHistory(Request $request)
+    public function getHistoryAction(Request $request)
     {
         $user2 = $request->get('userId');
         $repository = $this->getDoctrine()->getRepository(Chat::class);
@@ -48,15 +62,8 @@ class ChatController extends AbstractController
         }
 
         $chat = $chat ?? $messageHistory->getSingleResult();
-        $users = $this->getDoctrine()->getRepository(User::class)->getUsersByIdsIndexed([$chat->getUser1(), $chat->getUser2()]);
+        $chat = $this->formatMessages($chat);
 
-        $newMessages = [];
-        foreach ($chat->getMessages() as $message)
-        {
-            $message['user'] = $users[$message['user']];
-            $newMessages[] = $message;
-        }
-        $chat->setMessages($newMessages);
         return $this->render('chat/history.html.twig', [
             'chat' => $chat,
             'targetuserid' => $user2,
@@ -68,15 +75,21 @@ class ChatController extends AbstractController
      */
     public function addMessageAction(Request $request)
     {
-        //TODO Validate if correct user is adding message
-//        $user2 = $request->get('userId');
+        $chat = $this->chatRepository->find($request->get('chatid'));
 
-        $chat = $this->getDoctrine()->getRepository(Chat::class)->find($request->get('chatid'));
+        $loggedUser = $this->getUser();
+        if($chat->getUser1() !== $loggedUser->getId() && $chat->getUser2() !== $loggedUser->getId())
+        {
+            throw new AccessDeniedException('Access Denied. You can not add message. Its not you!');
+        }
+        if($request->get('message') === '')
+        {
+            throw new InvalidArgumentException("Message is empty");
+        }
+
         $em = $this->getDoctrine()->getManager();
         $chat->addMessage($this->getUser()->getId(), $request->get('message'));
-
         $em->persist($chat);
-
         $em->flush();
 
         return new JsonResponse([
@@ -84,4 +97,41 @@ class ChatController extends AbstractController
             'targetuserid' => $request->get('targetuserid')
         ]);
     }
+
+    /**
+     * @Route("chat/refresh", name="chat_refresh", methods={"GET"})
+     */
+    public function refreshAction(Request $request)
+    {
+        $chat = $this->chatRepository->find($request->get('chatid'));
+        $chat = $this->formatMessages($chat);
+
+        return $this->render('chat/refresh.html.twig', [
+            'chat' => $chat,
+        ]);
+    }
+
+    /**
+     * @param Chat $chat
+     * @return Chat
+     */
+    private function formatMessages(Chat $chat) : Chat
+    {
+        $users = $this->getDoctrine()->getRepository(User::class)->getUsersByIdsIndexed([$chat->getUser1(), $chat->getUser2()]);
+
+        $newMessages = [];
+        foreach ($chat->getMessages() as $message)
+        {
+            if(!isset($users[$message['user']]))
+            {
+                continue;
+            }
+            $message['user'] = $users[$message['user']];
+            $newMessages[] = $message;
+        }
+        $chat->setMessages($newMessages);
+
+        return $chat;
+    }
 }
+
