@@ -26,7 +26,7 @@ var post = {
             var url = '/group/' + groupid + '/post/' + postid + '/comment/newAjax';
 
             this.ajaxCall(url, 'POST', {content: $(element).val()}, function (data) {
-                $(element).closest('.groupItem').find(".comments-list").append(data);
+                $(element).closest('.postItem').find(".comments-list").append(data);
             });
         }
     },
@@ -92,18 +92,24 @@ var post = {
     showMoreComments: function (element, event) {
         var element = $(element);
         element.closest('.postItem').find('.extraComment').toggle('slow');
-        var action = element.data('action');
-        var value = 'show';
-        var text = 'Show more';
-        if(action == 'show')
-        {
-            value = 'hide';
-            text = 'Hide More';
-        }
-        element.text(text)
-        element.data('action', value);
-    }
-}
+        element.remove();
+        // var action = element.data('action');
+        // var value = 'show';
+        // var text = 'Show more';
+        // if(action == 'show')
+        // {
+        //     value = 'hide';
+        //     text = 'Hide More';
+        // }
+        // element.text(text)
+        // element.data('action', value);
+    },
+    toggleMorePostContent: function (element, event) {
+        $(element).parents(':first').find('.morePostContent').toggle();
+        $(element).parents(':first').find('.dots').remove();
+        $(element).remove();
+    },
+};
 
 $(document).on('click', 'a.groupViewLink', function (event) {
     post.generateGroupView(this)
@@ -117,6 +123,7 @@ $(document).on('click', 'a.likeComment', function (event) {
     event.preventDefault();
     post.likeComment($(this));
 });
+
 $(document).on('click', 'a.unlikeComment', function (event) {
     event.preventDefault();
     post.unlikeComment($(this));
@@ -153,4 +160,9 @@ $(document).on('click', 'a.lastCommentViewLink', function (event) {
 $(document).on('submit', 'form[name="post"]', function (event) {
     event.preventDefault();
     post.addPost(this, event);
+});
+
+$(document).on('click', '.morePostContentToggle', function (event) {
+    event.preventDefault();
+    post.toggleMorePostContent(this, event);
 });

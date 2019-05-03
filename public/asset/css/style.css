@@ -42,6 +42,11 @@ div.commentResponse {
     color: darkgreen;
 }
 
+.morePostContent
+{
+    display: none;
+}
+
 .extraComment
 {
     display: none;

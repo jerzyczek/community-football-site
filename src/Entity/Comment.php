@@ -199,8 +199,12 @@ class Comment
                 return true;
             }
         }
-
         return false;
+    }
+
+    public function getTimeAgo()
+    {
+
     }
 
     /**
@@ -215,6 +219,5 @@ class Comment
         {
             $this->createdAt = new \DateTime("now");
         }
-
     }
 }
