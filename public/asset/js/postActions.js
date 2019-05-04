@@ -62,13 +62,9 @@ var post = {
         }
         var commentid = $("#"+ formid + ' input[name="commentid"]').val();
         var callData = $("#"+ formid).serializeArray();
-
         this.ajaxCall('/comment/' + commentid + "/ajax", "DELETE", callData, function (data) {
             $('#commentid' + commentid).remove();
         });
-
-
-
     },
     generateLastCommentGroupView: function (element) {
         var postId = $(element).data('postid');
@@ -140,6 +136,21 @@ var post = {
             $(element).next('b').text(parseInt($(element).next('b').text()) - 1);
         });
     },
+    postDelete: function (element) {
+        var formid = $(element).data('formid');
+        if(!formid)
+        {
+            return;
+        }
+        var postid = $("#"+ formid + ' input[name="postid"]').val();
+        var callData = $("#"+ formid).serializeArray();
+        callData.push({name: 'isAjax', value: true});
+
+        this.ajaxCall('/post/' + postid, "DELETE", callData, function (data) {
+            $('.postItem[data-postid="'+postid+'"]').remove();
+            $(element).closest('.modal').modal('toggle');
+        });
+    },
 };
 
 $(document).on('click', 'a.groupViewLink', function (event) {
@@ -175,7 +186,7 @@ $(document).on('click', 'a.commentDelete', function (event) {
     $('input[name="_token"]').val($(this).data('commenttoken'));
 });
 
-$(document).on('click', '.modal button[type="submit"]', function () {
+$(document).on('click', '#deleteCommentModal button[type="submit"]', function () {
     post.deleteComment(this);
 });
 
@@ -206,6 +217,16 @@ $(document).on('click', 'a.likePost', function (event) {
 $(document).on('click', 'a.unlikePost', function (event) {
     event.preventDefault();
     post.unlikePost($(this));
+});
+
+$(document).on('click', 'a.postDelete',function (event) {
+
+    $('#deletePostModal input[name="postid"]').val($(this).data('postid'));
+    $('#deletePostModal input[name="_token"]').val($(this).data('posttoken'));
+});
+
+$(document).on('click', '#deletePostModal button[type="submit"]', function (event) {
+    post.postDelete(this, event);
 });
 
 

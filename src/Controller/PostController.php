@@ -134,7 +134,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/group/{groupId}/post/{id}", name="post_delete", methods={"DELETE"})
+     * @Route("/post/{id}", name="post_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Post $post): Response
     {
@@ -142,6 +142,11 @@ class PostController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($post);
             $entityManager->flush();
+        }
+
+        if((bool)$request->get('isAjax') === true)
+        {
+            return new JsonResponse(['postDeleted' => true]);
         }
 
         return $this->redirectToRoute('post_index');
