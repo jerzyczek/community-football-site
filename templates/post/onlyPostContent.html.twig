@@ -1,0 +1,39 @@
+{% if post.user.id == app.user.id %}
+    <div class="postActions float-right">
+        <a class="postEdit text-success" data-toggle="modal" data-postid="{{ post.id }}" data-target="#editPostModal">
+            <i class="fa fa-edit"></i>
+        </a>
+        <a class="postDelete text-danger" data-toggle="modal" data-postid="{{ post.id }}" data-posttoken="{{ csrf_token('delete' ~ post.id) }}" data-target="#deletePostModal">
+            <i class="fa fa-trash"></i>
+        </a>
+
+    </div>
+{% endif %}
+<strong class="d-inline-block mb-2 text-success">{{ post.getUser().getFullName() }}</strong>
+<h3 class="mb-0">{{ post.title }}</h3>
+<div class="mb-1 text-muted">{{ post.createdAt|date('M d H:i') }}</div>
+<p class="mb-auto">
+    {% if post.content|length < 250 %}
+        here
+        {{ post.content }}
+    {% else %}
+        {{ post.content|slice(0, 250)}}<span class="morePostContent">{{post.content|slice(250, post.content|length) }}</span><span class="dots">...</span>
+        <a href="#" class="morePostContentToggle stretched-link d-inline-block">Show more</a>
+    {% endif %}
+</p>
+<hr>
+<small class="reactionActions">
+    {% if post.isUserLikePost(app.user) %}
+        <a class="unlikePost" >
+            <i class="fa fa-thumbs-down"></i>
+            <span>Unlike it</span>
+        </a>
+    {% else %}
+        <a class="likePost">
+            <i class="fa fa-thumbs-up"></i>
+            <span>Like it!</span>
+        </a>
+    {% endif %}
+    <b>{{ post.reactions|length }}</b>
+    {#<a href="" class="responseLink">Response</a>&nbsp;#}
+</small>

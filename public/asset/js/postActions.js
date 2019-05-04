@@ -151,6 +151,26 @@ var post = {
             $(element).closest('.modal').modal('toggle');
         });
     },
+    postEditPrepare: function (element) {
+
+        var postid = $(element).data('postid');
+        this.ajaxCall('/post/' + postid + "/edit/prepare", "GET", null, function (data) {
+            $('#editPostModal .modal-body').html(data);
+            $('#editPostModal button[type="submit"]:first').attr("data-postid", postid);
+
+        });
+    },
+    postEdit: function (element) {
+        var postid = $(element).data('postid');
+        var form = $(element).parents('.modal-content').find('form:first');
+        var data = form.serializeArray();
+        data.push({name: "isAjax", value: true});
+
+        this.ajaxCall('/post/' + postid + '/edit', 'POST', data, function (data) {
+            $("#editPostModal").modal('toggle');
+            $('.postItem[data-postid="'+postid+'"] .onlyPostContent').html(data);
+        });
+    },
 };
 
 $(document).on('click', 'a.groupViewLink', function (event) {
@@ -229,4 +249,12 @@ $(document).on('click', '#deletePostModal button[type="submit"]', function (even
     post.postDelete(this, event);
 });
 
+
+$(document).on('click', 'a.postEdit',function (event) {
+    post.postEditPrepare(this, event);
+});
+
+$(document).on('click', '#editPostModal button[type="submit"]',function (event) {
+    post.postEdit(this, event);
+});
 

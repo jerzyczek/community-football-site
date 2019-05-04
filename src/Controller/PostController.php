@@ -112,7 +112,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/group/{groupId}/post/{id}/edit", name="post_edit", methods={"GET","POST"})
+     * @Route("/post/{id}/edit", name="post_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Post $post): Response
     {
@@ -122,16 +122,39 @@ class PostController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            if((bool)$request->get('isAjax') === true)
+            {
+                return $this->render('post/onlyPostContent.html.twig', [
+                    'post' => $post,
+                ]);
+            }
+
             return $this->redirectToRoute('post_index', [
                 'id' => $post->getId(),
             ]);
         }
+
 
         return $this->render('post/edit.html.twig', [
             'post' => $post,
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/post/{id}/edit/prepare", name="post_edit_prepare", methods={"GET","POST"})
+     */
+    public function editPrepare(Request $request, Post $post): Response
+    {
+        $form = $this->createForm(PostType::class, $post);
+
+        return $this->render('post/clearForm.html.twig', [
+            'post' => $post,
+            'form' => $form->createView(),
+        ]);
+    }
+
+
 
     /**
      * @Route("/post/{id}", name="post_delete", methods={"DELETE"})
