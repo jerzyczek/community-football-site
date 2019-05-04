@@ -8,7 +8,7 @@
             <h4 class="media-heading user_name">{{ comment.getUser().getFullName() }}</h4>
 
             <p class="text-body flex-md-wrap">{{ comment.content }}</p>
-            <small class="commentActions">
+            <small class="reactionActions">
                 {% if comment.isUserLikeComment(app.user) %}
                     <a class="unlikeComment" ><i class="fa fa-thumbs-down"></i></a>
                 {% else %}

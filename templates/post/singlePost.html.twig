@@ -1,6 +1,17 @@
 <div data-sort="{{ post.id }}" class="col-md-12 no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative postItem" data-postid="{{ post.id }}">
     <div class="row">
-        <div class="col p-4 d-flex flex-column position-static">
+        <div class="col p-4 flex-column position-static">
+            {% if post.user.id == app.user.id %}
+                <div class="postActions float-right">
+                    <a class="postDelete text-success" data-toggle="modal" data-postid="{{ post.id }}" data-posttoken="{{ csrf_token('delete' ~ post.id) }}" data-target="#editPostModal">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    <a class="postDelete text-danger" data-toggle="modal" data-postid="{{ post.id }}" data-posttoken="{{ csrf_token('delete' ~ post.id) }}" data-target="#deletePostModal">
+                        <i class="fa fa-trash"></i>
+                    </a>
+
+                </div>
+            {% endif %}
             <strong class="d-inline-block mb-2 text-success">{{ post.getUser().getFullName() }}</strong>
             <h3 class="mb-0">{{ post.title }}</h3>
             <div class="mb-1 text-muted">{{ post.createdAt|date('M d H:i') }}</div>
@@ -14,8 +25,24 @@
                     {#</span>#}
                 {% endif %}
             </p>
-
+            <hr>
+            <small class="reactionActions">
+                {% if post.isUserLikePost(app.user) %}
+                    <a class="unlikePost" >
+                        <i class="fa fa-thumbs-down"></i>
+                        <span>Unlike it</span>
+                    </a>
+                {% else %}
+                    <a class="likePost">
+                        <i class="fa fa-thumbs-up"></i>
+                        <span>Like it!</span>
+                    </a>
+                {% endif %}
+                <b>{{ post.reactions|length }}</b>
+                {#<a href="" class="responseLink">Response</a>&nbsp;#}
+            </small>
         </div>
+
 
         <div class="col-md-12 no-gutter comments-list">
             {% if post.getComments()|length > 0 %}
@@ -36,7 +63,7 @@
                                 <h4 class="media-heading user_name">{{ comment.getUser().getFullName() }}</h4>
 
                                 <p class="text-body flex-md-wrap">{{ comment.content }}</p>
-                                <small class="commentActions">
+                                <small class="reactionActions">
                                     {% if comment.isUserLikeComment(app.user) %}
                                         <a class="unlikeComment" ><i class="fa fa-thumbs-down"></i></a>
                                     {% else %}
@@ -72,3 +99,7 @@
         </div>
     </div>
 </div>
+
+
+{{ include('post/modals/delete.html.twig') }}
+{{ include('comment/modals/delete.html.twig') }}

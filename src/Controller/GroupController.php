@@ -110,8 +110,8 @@ class GroupController extends AbstractController
     {
         $group = $this->getDoctrine()->getRepository(Group::class)->find($request->get('id'));
 
-        $post = new Post();
-        $form = $this->createForm(PostType::class, $post);
+        $newPost = new Post();
+        $form = $this->createForm(PostType::class, $newPost);
 
         return $this->render('group/mainGroup.html.twig', [
             'group' => $group,

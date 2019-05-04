@@ -223,4 +223,36 @@ class Post
         $this->images[] = $images;
         return $this;
     }
+
+    public function isUserLikePost(User $user)
+    {
+        foreach ($this->reactions as $reaction)
+        {
+            if($reaction['user'] === $user->getId())
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function addReaction(User $user, $reaction) : self
+    {
+        $this->reactions[] = ['user' => $user->getId(), 'reaction' => $reaction];
+
+        return $this;
+    }
+
+    public function removeReaction(User $user, $reaction) : self
+    {
+        foreach ($this->reactions as $key => $rowReaction)
+        {
+            if($rowReaction['user'] == $user->getId() && $rowReaction['reaction'] == $reaction)
+            {
+                unset($this->reactions[$key]);
+            }
+        }
+
+        return $this;
+    }
 }

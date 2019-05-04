@@ -109,6 +109,37 @@ var post = {
         $(element).parents(':first').find('.dots').remove();
         $(element).remove();
     },
+    likePost: function (element) {
+
+        var postid = element.closest('.postItem').data('postid');
+        var url = '/post/' + postid + '/like';
+        this.ajaxCall(url, 'POST', {id: postid}, function (data) {
+
+            $(element).removeClass('likePost');
+            $(element).addClass('unlikePost');
+            $(element).children('i:first').removeClass('fa-thumbs-up');
+            $(element).children('i:first').addClass('fa-thumbs-down');
+            $(element).children('span:first').text('Unlike it');
+            $(element).next('b').text(parseInt($(element).next('b').text()) + 1);
+        });
+
+    },
+    unlikePost: function (element) {
+
+        var postid = element.closest('.postItem').data('postid');
+        var url = '/post/' + postid + '/unlike';
+        this.ajaxCall(url, 'POST', {id: postid}, function (data) {
+
+            $(element).removeClass('unlikePost');
+            $(element).addClass('likePost');
+
+            $(element).children('i:first').removeClass('fa-thumbs-down');
+            $(element).children('i:first').addClass('fa-thumbs-up');
+
+            $(element).children('span:first').text('Like it');
+            $(element).next('b').text(parseInt($(element).next('b').text()) - 1);
+        });
+    },
 };
 
 $(document).on('click', 'a.groupViewLink', function (event) {
@@ -166,3 +197,15 @@ $(document).on('click', '.morePostContentToggle', function (event) {
     event.preventDefault();
     post.toggleMorePostContent(this, event);
 });
+
+$(document).on('click', 'a.likePost', function (event) {
+    event.preventDefault();
+    post.likePost($(this));
+});
+
+$(document).on('click', 'a.unlikePost', function (event) {
+    event.preventDefault();
+    post.unlikePost($(this));
+});
+
+

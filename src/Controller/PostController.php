@@ -20,13 +20,10 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Tests\Normalizer\ObjectSerializerNormalizer;
 
 
-/**
- * @Route("group/{groupId}/post")
- */
 class PostController extends AbstractController
 {
     /**
-     * @Route("/", name="post_index", methods={"GET"})
+     * @Route("/group/{groupId}/post", name="post_index", methods={"GET"})
      */
     public function index(GroupRepository $groupRepository, Request $request): Response
     {
@@ -38,7 +35,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="post_new", methods={"GET","POST"})
+     * @Route("/group/{groupId}/post/new", name="post_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -105,7 +102,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="post_show", methods={"GET"})
+     * @Route("/group/{groupId}/post/{id}", name="post_show", methods={"GET"})
      */
     public function show(Post $post, Request $request): Response
     {
@@ -115,7 +112,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="post_edit", methods={"GET","POST"})
+     * @Route("/group/{groupId}/post/{id}/edit", name="post_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Post $post): Response
     {
@@ -137,7 +134,7 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="post_delete", methods={"DELETE"})
+     * @Route("/group/{groupId}/post/{id}", name="post_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Post $post): Response
     {
@@ -151,13 +148,37 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/postView", name="post_client_main", methods={"GET"})
+     * @Route("/post/{id}/like", name="post_like", methods={"POST"})
      */
-    public function getPostUserView(Request $request)
+    public function likeAction(Request $request, Post $post): Response
     {
-        $post = $this->getDoctrine()->getRepository(Post::class)->find($request->get('id'));
+        if($post->isUserLikePost($this->getUser()) === true)
+        {
+            return new JsonResponse(['error' => "You already like this post"]);
+        }
 
-        dump($post);
-        die;
+        $post->addReaction($this->getUser(), 'like');
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($post);
+        $entityManager->flush();
+
+        return new JsonResponse(['reactionAdded' => true]);
+    }
+
+    /**
+     * @Route("/post/{id}/unlike", name="post_unlike", methods={"POST"})
+     */
+    public function unlikeAction(Request $request, Post $post): Response
+    {
+        if($post->isUserLikePost($this->getUser()) === false)
+        {
+            return new JsonResponse(['error' => "You already do not like this post"]);
+        }
+        $post->removeReaction($this->getUser(), 'like');
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($post);
+        $entityManager->flush();
+
+        return new JsonResponse(['reactionRemoved' => true]);
     }
 }

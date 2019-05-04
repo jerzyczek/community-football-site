@@ -32,14 +32,17 @@ div.commentResponse {
     height: 40px;
 }
 
-.media .commentActions a
+.postItem .reactionActions a
 {
     color: green;
+    cursor: pointer;
 }
 
-.media .commentActions a:hover
+
+.postItem .reactionActions a:hover
 {
     color: darkgreen;
+    cursor: pointer;
 }
 
 .morePostContent
