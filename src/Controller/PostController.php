@@ -8,6 +8,7 @@ use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\GroupRepository;
 use App\Repository\PostRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,8 +58,8 @@ class PostController extends AbstractController
             {
                 /** @var UploadedFile $file */
                 foreach ($files as $file) {
-                    $image = new Image();
 
+                    $image = new Image();
                     $filename = md5(uniqid()) . '.' . $file->guessClientExtension();
 
                     $image->setFilename($filename);
@@ -208,5 +209,24 @@ class PostController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse(['reactionRemoved' => true]);
+    }
+
+    /**
+     * @Route("post/{id}/view", name="post_view", methods={"GET"})
+     */
+    public function getGroupUserView(Request $request, Post $post)
+    {
+        $group = $post->getGroup();
+        $collection = new ArrayCollection();
+        $collection->add($post);
+        $group->setPosts($collection);
+
+        $newPost = new Post();
+        $form = $this->createForm(PostType::class, $newPost);
+
+        return $this->render('group/mainGroup.html.twig', [
+            'group' => $group,
+            'form' => $form->createView()
+        ]);
     }
 }

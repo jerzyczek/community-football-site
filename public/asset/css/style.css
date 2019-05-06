@@ -17,8 +17,14 @@ textarea.form-control.commentField {
 
 
 
+
 div.commentResponse {
     display: none;
+}
+
+.comments-list .childComment
+{
+    margin-left: 5%;
 }
 
 .comments-list .comment .media .dropdown

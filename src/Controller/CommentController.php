@@ -122,23 +122,39 @@ class CommentController extends AbstractController
     }
 
     /**
-     * @Route("group/{groupId}/post/{postId}/comment/newAjax", name="comment_new", methods={"POST"})
+     * @Route("/post/{postId}/comment/newAjax", name="comment_new", methods={"POST"})
      */
-    public function newAjax(Request $request): Response
+    public function newAjax(Request $request, CommentRepository $commentRepository, PostRepository $postRepository): Response
     {
-
-        //TODO VALIDATE
         $entityManager = $this->getDoctrine()->getManager();
         $comment = new Comment();
         $comment->setUser($this->getUser());
-        $comment->setPost($this->getDoctrine()->getRepository(Post::class)->find($request->get('postId')));
+        $comment->setPost($postRepository->find($request->get('postId')));
         $comment->setContent($request->get('content'));
+
+        $commentid = null;
+        if($commentid = $request->get('commentid'))
+        {
+            $parentComment = $commentRepository->find($commentid);
+            $comment->setParentComment($parentComment);
+        }
+
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        return $this->render('comment/singleCommentView.html.twig', [
+        $template = 'comment/singleCommentView.html.twig';
+        $data = [
             'comment' => $comment
-        ]);
+        ];
+        if($commentid !== null)
+        {
+            $template = 'comment/childComment.html.twig';
+            $data = [
+                'childComment' => $comment
+            ];
+        }
+
+        return $this->render($template, $data);
 
     }
 

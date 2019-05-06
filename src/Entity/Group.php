@@ -139,6 +139,18 @@ class Group
         return $this->posts;
     }
 
+    /**
+     * @param Collection $posts
+     *
+     * @return $this
+     */
+    public function setPosts(Collection $posts)
+    {
+        $this->posts = $posts;
+
+        return $this;
+    }
+
     public function addPost(Post $post): self
     {
         if (!$this->posts->contains($post)) {

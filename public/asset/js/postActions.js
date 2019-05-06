@@ -1,7 +1,5 @@
-
 var post = {
-    ajaxCall : function (url, method, data, callback)
-    {
+    ajaxCall: function (url, method, data, callback) {
         $.ajax({
             type: method || "GET",
             data: data || {},
@@ -13,19 +11,26 @@ var post = {
         element.toggle('slow');
     },
     addComment: function (element, event) {
-        if(event.which == 13 && !event.shiftKey)
-        {
+        if (event.which == 13 && !event.shiftKey) {
             event.preventDefault();
             var value = jQuery.trim($(element).val());
-            if(value === '')
-            {
+            if (value === '') {
                 return;
             }
             var postid = $(element).closest('.postItem').data('postid');
-            var groupid = $(element).closest('.groupItem').data('groupid');
-            var url = '/group/' + groupid + '/post/' + postid + '/comment/newAjax';
+            var url = '/post/' + postid + '/comment/newAjax';
 
-            this.ajaxCall(url, 'POST', {content: $(element).val()}, function (data) {
+            var data = {
+                content: $(element).val(),
+                commentid: $(element).closest('.comment').data('commentid')
+            };
+
+            this.ajaxCall(url, 'POST', data, function (data) {
+
+                if ($(element).closest('.comment').length > 0) {
+                    $(element).closest('.comment').append(data);
+                    return;
+                }
                 $(element).closest('.postItem').find(".comments-list").append(data);
             });
         }
@@ -33,7 +38,14 @@ var post = {
     generateGroupView: function (element) {
         var groupId = $(element).data('groupid');
 
-        this.ajaxCall("group/"+groupId+"/groupView", false, false, function (data) {
+        this.ajaxCall("group/" + groupId + "/groupView", false, false, function (data) {
+            $('#mainView').html(data);
+        });
+    },
+    generatePostView: function (element) {
+        var post = $(element).data('postid');
+
+        this.ajaxCall("post/" + post + "/view", 'GET', false, function (data) {
             $('#mainView').html(data);
         });
     },
@@ -56,12 +68,11 @@ var post = {
     },
     deleteComment: function (element) {
         var formid = $(element).data('formid');
-        if(!formid)
-        {
+        if (!formid) {
             return;
         }
-        var commentid = $("#"+ formid + ' input[name="commentid"]').val();
-        var callData = $("#"+ formid).serializeArray();
+        var commentid = $("#" + formid + ' input[name="commentid"]').val();
+        var callData = $("#" + formid).serializeArray();
         this.ajaxCall('/comment/' + commentid + "/ajax", "DELETE", callData, function (data) {
             $('#commentid' + commentid).remove();
         });
@@ -70,7 +81,7 @@ var post = {
         var postId = $(element).data('postid');
         var groupId = $(element).data('groupid');
 
-        this.ajaxCall("group/"+groupId+"/post/"+postId+"/postView", false, false, function (data) {
+        this.ajaxCall("group/" + groupId + "/post/" + postId + "/postView", false, false, function (data) {
             //$('#mainView').html(data);
         });
     },
@@ -89,16 +100,6 @@ var post = {
         var element = $(element);
         element.closest('.postItem').find('.extraComment').toggle('slow');
         element.remove();
-        // var action = element.data('action');
-        // var value = 'show';
-        // var text = 'Show more';
-        // if(action == 'show')
-        // {
-        //     value = 'hide';
-        //     text = 'Hide More';
-        // }
-        // element.text(text)
-        // element.data('action', value);
     },
     toggleMorePostContent: function (element, event) {
         $(element).parents(':first').find('.morePostContent').toggle();
@@ -138,16 +139,15 @@ var post = {
     },
     postDelete: function (element) {
         var formid = $(element).data('formid');
-        if(!formid)
-        {
+        if (!formid) {
             return;
         }
-        var postid = $("#"+ formid + ' input[name="postid"]').val();
-        var callData = $("#"+ formid).serializeArray();
+        var postid = $("#" + formid + ' input[name="postid"]').val();
+        var callData = $("#" + formid).serializeArray();
         callData.push({name: 'isAjax', value: true});
 
         this.ajaxCall('/post/' + postid, "DELETE", callData, function (data) {
-            $('.postItem[data-postid="'+postid+'"]').remove();
+            $('.postItem[data-postid="' + postid + '"]').remove();
             $(element).closest('.modal').modal('toggle');
         });
     },
@@ -168,7 +168,7 @@ var post = {
 
         this.ajaxCall('/post/' + postid + '/edit', 'POST', data, function (data) {
             $("#editPostModal").modal('toggle');
-            $('.postItem[data-postid="'+postid+'"] .onlyPostContent').html(data);
+            $('.postItem[data-postid="' + postid + '"] .onlyPostContent').html(data);
         });
     },
 };
@@ -239,7 +239,7 @@ $(document).on('click', 'a.unlikePost', function (event) {
     post.unlikePost($(this));
 });
 
-$(document).on('click', 'a.postDelete',function (event) {
+$(document).on('click', 'a.postDelete', function (event) {
 
     $('#deletePostModal input[name="postid"]').val($(this).data('postid'));
     $('#deletePostModal input[name="_token"]').val($(this).data('posttoken'));
@@ -250,11 +250,14 @@ $(document).on('click', '#deletePostModal button[type="submit"]', function (even
 });
 
 
-$(document).on('click', 'a.postEdit',function (event) {
+$(document).on('click', 'a.postEdit', function (event) {
     post.postEditPrepare(this, event);
 });
 
-$(document).on('click', '#editPostModal button[type="submit"]',function (event) {
+$(document).on('click', '#editPostModal button[type="submit"]', function (event) {
     post.postEdit(this, event);
 });
 
+$(document).on('click', '.lastPostViewLink', function (event) {
+    post.generatePostView(this, event);
+});

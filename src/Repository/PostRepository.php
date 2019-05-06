@@ -1,8 +1,11 @@
 <?php
 namespace App\Repository;
 
+use App\Entity\Comment;
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
+use PhpParser\Node\Expr;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use App\Entity\User;
 
@@ -26,13 +29,17 @@ class PostRepository extends ServiceEntityRepository
         $qb->select('p')
             ->innerJoin('p.group','g', 'p.group=g.id')
             ->innerJoin('g.members', 'gu', 'g.id=gu.group_id')
+//            ->innerJoin(Comment::class, 'cc')
+//            ->where('p.id = cc.post_id')
+//            ->where($qb->expr()->isNull('cc.parent_comment_id'))
+//            ->where('cc.parentComment is null')
             ->where('gu.id = :id OR g.user = :id')
             ->orderBy('p.createdAt', 'DESC');
 
         $qb->setParameter('id', $user->getId());
-        $query = $qb->getQuery();
+        $query = $qb->getQuery()->getResult();
 
-        return $query->getResult();
+        return $query;
     }
 
     //get newest posts from every member group

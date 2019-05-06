@@ -171,7 +171,16 @@ class Post
      */
     public function getComments(): Collection
     {
-        return $this->comments;
+
+        $out = clone $this->comments;
+        foreach ($out as $key => $comment)
+        {
+            if($comment->getParentComment() !== null)
+            {
+                unset($out[$key]);
+            }
+        }
+        return $out;
     }
 
     public function addComment(Comment $comment): self

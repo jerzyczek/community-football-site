@@ -36,12 +36,7 @@ class Comment
      */
     private $content;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CommentReplies", mappedBy="comment", orphanRemoval=true)
-     */
-    private $commentReplies;
-
-    /**
+   /**
      * @ORM\Column(type="json_array", nullable=true)
      */
     private $reactions;
@@ -56,10 +51,22 @@ class Comment
      */
     private $updatedAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Comment", inversedBy="childrenComments")
+     */
+    private $parentComment;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="parentComment")
+     */
+    private $childrenComments;
+
+    
+
     public function __construct()
     {
-        $this->commentReplies = new ArrayCollection();
         $this->reactions = [];
+        $this->childrenComments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -135,36 +142,6 @@ class Comment
         return $this;
     }
 
-    /**
-     * @return Collection|CommentReplies[]
-     */
-    public function getCommentReplies(): Collection
-    {
-        return $this->commentReplies;
-    }
-
-    public function addCommentReply(CommentReplies $commentReply): self
-    {
-        if (!$this->commentReplies->contains($commentReply)) {
-            $this->commentReplies[] = $commentReply;
-            $commentReply->setComment($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCommentReply(CommentReplies $commentReply): self
-    {
-        if ($this->commentReplies->contains($commentReply)) {
-            $this->commentReplies->removeElement($commentReply);
-            // set the owning side to null (unless already changed)
-            if ($commentReply->getComment() === $this) {
-                $commentReply->setComment(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getCreatedAt(): ?\DateTimeInterface
     {
@@ -220,4 +197,48 @@ class Comment
             $this->createdAt = new \DateTime("now");
         }
     }
+
+    public function getParentComment(): ?self
+    {
+        return $this->parentComment;
+    }
+
+    public function setParentComment(?self $parentComment): self
+    {
+        $this->parentComment = $parentComment;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|self[]
+     */
+    public function getChildrenComments(): Collection
+    {
+        return $this->childrenComments;
+    }
+
+    public function addChildrenComment(self $childrenComment): self
+    {
+        if (!$this->childrenComments->contains($childrenComment)) {
+            $this->childrenComments[] = $childrenComment;
+            $childrenComment->setParentComment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChildrenComment(self $childrenComment): self
+    {
+        if ($this->childrenComments->contains($childrenComment)) {
+            $this->childrenComments->removeElement($childrenComment);
+            // set the owning side to null (unless already changed)
+            if ($childrenComment->getParentComment() === $this) {
+                $childrenComment->setParentComment(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

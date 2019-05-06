@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Repository\GroupRepository;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
@@ -43,6 +44,7 @@ class HomePageController extends AbstractController
         }
         $this->logUserAction();
         $posts = $this->postRepository->getAllPosts($this->getUser());
+
         $newestPostsFromMemberGroups = $this->postRepository->getNewestPosts($this->getUser());
 
         return $this->render('dashboard_page.html.twig', [
