@@ -64,7 +64,7 @@ class Post
     /**
      * @ORM\Column(type="json_array", nullable=true)
      */
-    private $reactions;
+    private $reactions = [];
 
     /**
      * @ORM\OneToMany(targetEntity="Image", mappedBy="post", cascade={"persist"})

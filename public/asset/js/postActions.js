@@ -54,7 +54,13 @@ var post = {
         var commentid = element.closest('.comment').data('commentid');
         var url = '/comment/' + commentid + '/like';
         this.ajaxCall(url, 'POST', {id: commentid}, function (data) {
-            $('#commentid' + commentid).html(data);
+            // $('#commentid' + commentid).html(data);
+            $(element).removeClass('likePost');
+            $(element).addClass('unlikePost');
+            $(element).children('i:first').removeClass('fa-thumbs-up');
+            $(element).children('i:first').addClass('fa-thumbs-down');
+            $(element).children('span:first').text('Unlike it');
+            $(element).next('b').text(parseInt($(element).next('b').text()) + 1);
         });
 
     },
@@ -63,8 +69,18 @@ var post = {
         var commentid = element.closest('.comment').data('commentid');
         var url = '/comment/' + commentid + '/unlike';
         this.ajaxCall(url, 'POST', {id: commentid}, function (data) {
-            $('#commentid' + commentid).html(data);
+            // $('#commentid' + commentid).html(data);
+
+            $(element).removeClass('unlikePost');
+            $(element).addClass('likePost');
+
+            $(element).children('i:first').removeClass('fa-thumbs-down');
+            $(element).children('i:first').addClass('fa-thumbs-up');
+
+            $(element).children('span:first').text('Like it');
+            $(element).next('b').text(parseInt($(element).next('b').text()) - 1);
         });
+
     },
     deleteComment: function (element) {
         var formid = $(element).data('formid');

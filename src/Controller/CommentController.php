@@ -144,8 +144,11 @@ class CommentController extends AbstractController
 
         $template = 'comment/singleCommentView.html.twig';
         $data = [
-            'comment' => $comment
+            'comment' => $comment,
+            'post' => $comment->getPost(),
+            'key' => count($comment->getPost()->getComments()),
         ];
+
         if($commentid !== null)
         {
             $template = 'comment/childComment.html.twig';
@@ -168,9 +171,10 @@ class CommentController extends AbstractController
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        return $this->render('comment/singleCommentView.html.twig', [
-            'comment' => $comment
-        ]);
+//        return $this->render('comment/singleCommentView.html.twig', [
+//            'comment' => $comment
+//        ]);
+        return new JsonResponse(['reactionAdded' => true]);
     }
 
     /**
@@ -184,8 +188,10 @@ class CommentController extends AbstractController
         $entityManager->persist($comment);
         $entityManager->flush();
 
-        return $this->render('comment/singleCommentView.html.twig', [
-            'comment' => $comment
-        ]);
+        return new JsonResponse(['reactionRemoved' => true]);
+
+//        return $this->render('comment/singleCommentView.html.twig', [
+//            'comment' => $comment
+//        ]);
     }
 }

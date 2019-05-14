@@ -78,9 +78,9 @@ class Chat
     {
 
         $this->messages[] = [
-            'user' => $userId,
+            'user'    => $userId,
             'message' => $message,
-            'date' => (new \DateTime())->format("Y-m-d H:i:s")
+            'date'    => (new \DateTime())->format("Y-m-d H:i:s")
         ];
 
         return $this;
