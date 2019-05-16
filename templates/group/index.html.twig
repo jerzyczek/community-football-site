@@ -3,46 +3,48 @@
 {% block title %}Group index{% endblock %}
 
 {% block body %}
-    <h1>Group index</h1>
+    <div class="container-fluid">
+        <h1>Group index</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Members</th>
-                <th>UpdatedAt</th>
-                <th>CreatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for group in groups %}
-            <tr>
-                <td>{{ group.id }}</td>
-                <td>{{ group.name }}</td>
-                <td>{{ group.description }}</td>
-                <td>
-                    {% for member in group.getMembers() %}
-                        <p>{{member.getFullName() }}</p>
-                    {% endfor %}
-                </td>
-                <td>{{ group.updatedAt ? group.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ group.createdAt ? group.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('group_show', {'id': group.id}) }}">show</a>
-                    <a href="{{ path('group_edit', {'id': group.id}) }}">edit</a>
-                    <a href="{{ path('post_index', {'groupId': group.id}) }}">posts</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <table class="table">
+            <thead>
+                <tr class="thead-color">
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Members</th>
+                    <th>UpdatedAt</th>
+                    <th>CreatedAt</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for group in groups %}
+                <tr class="{{ cycle(["white", "gray"], loop.index0)}}">
+                    <td>{{ group.id }}</td>
+                    <td>{{ group.name }}</td>
+                    <td>{{ group.description }}</td>
+                    <td>
+                        {% for member in group.getMembers() %}
+                            <p>{{member.getFullName() }}</p>
+                        {% endfor %}
+                    </td>
+                    <td>{{ group.updatedAt ? group.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ group.createdAt ? group.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>
+                        <a href="{{ path('group_show', {'id': group.id}) }}"><button class="btn btn-info">Show</button></a>
+                        <a href="{{ path('group_edit', {'id': group.id}) }}"><button class="btn btn-info">Edit</button></a>
+                        <a href="{{ path('post_index', {'groupId': group.id}) }}"><button class="btn btn-info">Posts</button></a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    <a href="{{ path('group_new') }}">Create new</a>
+        <a href="{{ path('group_new') }}"><button class="btn btn-primary">Create new</button></a>
+    </div>
 {% endblock %}

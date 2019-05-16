@@ -21,15 +21,6 @@ class PostType extends AbstractType
             ->add('content', TextareaType::class, [
                 'attr' => ['class' => 'form-control'],
             ])
-            ->add('images', FileType::class, [
-                'multiple' => true,
-                'mapped' => false,
-                'data_class' => null,
-                'required' => false,
-                'attr' => ['class' => 'input-group']
-            ])
-//            ->add('user')
-//            ->add('group')
         ;
     }
 

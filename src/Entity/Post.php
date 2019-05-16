@@ -235,6 +235,11 @@ class Post
 
     public function isUserLikePost(User $user)
     {
+        #TODO wywalic
+        if(empty($this->reactions) == []){
+            return false;
+        }
+
         foreach ($this->reactions as $reaction)
         {
             if($reaction['user'] === $user->getId())

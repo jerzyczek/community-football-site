@@ -99,3 +99,28 @@ div.commentResponse {
 {
     color: darkgray;;
 }
+
+.change-password-button
+{
+    margin-top: 10px;
+}
+
+.white
+{
+    background-color: #ffffff;
+}
+
+.gray
+{
+    background-color: rgba(83, 167, 8, 0.67);
+}
+
+.thead-color
+{
+    background-color: #A6CE93;
+}
+
+.delete-group-btn
+{
+    margin-top: 10px;
+}
