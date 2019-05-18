@@ -42,7 +42,8 @@ var liveChat = {
 
         self.lastUserId = $(element).data('userid');
         var data = {
-            userId: self.lastUserId
+            userId: self.lastUserId,
+            chatId: $(element).data('chatid')
         };
 
         this.ajaxCall( '/chat/history', 'GET', data, function (data) {
@@ -83,6 +84,14 @@ var liveChat = {
         this.lastUserId = null;
         this.refreshing = false;
         $('#'+ self.chatBoxHtmlId).remove();
+    },
+    addChat: function (form, event) {
+
+        var data = $(form).serializeArray();
+
+        this.ajaxCall("/chat/createNew", 'POST', data, function (data) {
+            $('#chats').append(data);
+        });
     }
 };
 $(document).on('click', '.sidebarUser', function (event) {
@@ -102,5 +111,11 @@ $(document).on('keypress', '.chatMessage', function (event) {
 
 $(document).on('click', '.closeChatbox', function (event) {
     liveChat.closeChatBox(this, event)
+});
+
+$(document).on('click', '#createChatModal button[type="submit"]', function (event) {
+
+   event.preventDefault();
+   liveChat.addChat($('form[name="chat"]'), event);
 });
 

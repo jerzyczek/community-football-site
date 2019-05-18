@@ -75,6 +75,12 @@ Home Page
             <aside class="col-md-2 bg-light d-md-block" id="asideBarRight">
                 <div class="sidebar-sticky">
 
+                    <a class="btn btn-primary chatAdd" data-toggle="modal" data-target="#createChatModal">
+                        <i class="fa fa-plus"></i>
+                        Create Chat
+                    </a>
+
+
                     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted mb-3">
                         <span>Users</span>
                     </h6>
@@ -82,12 +88,23 @@ Home Page
                     <ul class="nav flex-column mb-2" id="usersOnlineSidebar">
 
                     </ul>
+
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted mb-3">
+                        <span>My chats</span>
+                    </h6>
+
+                    <ul class="nav flex-column mb-2" id="chats">
+                        {% for chat in chats %}
+                            {{ include('chat/row.html.twig') }}
+                        {% endfor %}
+                    </ul>
                 </div>
             </aside>
         </div>
     </div>
-
+    {{ include('chat/modals/create.html.twig') }}
 {% endblock %}
+
 
 
 {% block javascripts %}

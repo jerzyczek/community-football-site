@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Chat;
 use App\Entity\Comment;
+use App\Form\ChatType;
+use App\Repository\ChatRepository;
 use App\Repository\GroupRepository;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
@@ -36,7 +39,7 @@ class HomePageController extends AbstractController
     /**
      * @Route("/dashboard", name="dashboard")
      */
-    public function dashboard()
+    public function dashboard(ChatRepository $chatRepository)
     {
         if(!$this->getUser())
         {
@@ -47,9 +50,15 @@ class HomePageController extends AbstractController
 
         $newestPostsFromMemberGroups = $this->postRepository->getNewestPosts($this->getUser());
 
+        $chatForm = $this->createForm(ChatType::class, new Chat());
+
+        $chats = $this->getUser()->getChats();
+
         return $this->render('dashboard_page.html.twig', [
             'posts' => $posts,
-            'newestPosts' => $newestPostsFromMemberGroups
+            'newestPosts' => $newestPostsFromMemberGroups,
+            'chatForm' => $chatForm->createView(),
+            'chats' => $chats
         ]);
     }
 

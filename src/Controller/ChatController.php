@@ -6,6 +6,7 @@ use App\Entity\Chat;
 use App\Entity\User;
 use App\Repository\ChatRepository;
 use App\Repository\PostRepository;
+use App\Repository\UserRepository;
 use \Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -46,11 +47,18 @@ class ChatController extends AbstractController
     /**
      * @Route("chat/history", name="chat_history", methods={"GET"})
      */
-    public function getHistoryAction(Request $request)
+    public function getHistoryAction(Request $request, ChatRepository $chatRepository)
     {
+        $chatId = $request->get('chatId');
+        if($chatId)
+        {
+            $chat = $chatRepository->find($chatId);
+            return $this->render('chat/history.html.twig', [
+                'chat' => $this->formatMessages($chat)
+            ]);
+        }
         $user2 = $request->get('userId');
-        $repository = $this->getDoctrine()->getRepository(Chat::class);
-        $messageHistory = $repository->getHistoryQuery($this->getUser(), $user2);
+        $messageHistory = $chatRepository->getHistoryQuery($this->getUser(), $user2);
         if(count($messageHistory->getResult()) < 1)
         {
             $manager = $this->getDoctrine()->getManager();
@@ -77,11 +85,11 @@ class ChatController extends AbstractController
     {
         $chat = $this->chatRepository->find($request->get('chatid'));
 
-        $loggedUser = $this->getUser();
-        if($chat->getUser1() !== $loggedUser->getId() && $chat->getUser2() !== $loggedUser->getId())
-        {
-            throw new AccessDeniedException('Access Denied. You can not add message. Its not you!');
-        }
+//        $loggedUser = $this->getUser();
+//        if($chat->getUser1() !== $loggedUser->getId() && $chat->getUser2() !== $loggedUser->getId())
+//        {
+//            throw new AccessDeniedException('Access Denied. You can not add message. Its not you!');
+//        }
         if($request->get('message') === '')
         {
             throw new InvalidArgumentException("Message is empty");
@@ -112,12 +120,53 @@ class ChatController extends AbstractController
     }
 
     /**
+     * @Route("chat/createNew", name="chat_createNew", methods={"GET", "POST"})
+     */
+    public function createNewAction(Request $request, UserRepository $userRepository)
+    {
+        $chatRequest = $request->get('chat');
+
+
+        $chat = new Chat();
+        $chat->setName($chatRequest['name']);
+        $chat->addMember($this->getUser());
+        $chat->setUser1(-1);
+        $chat->setUser2(-1);
+        foreach ($chatRequest['members'] as $userId)
+        {
+            $chat->addMember($userRepository->find((int)$userId));
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($chat);
+        $em->flush();
+
+        return $this->render('chat/row.html.twig', [
+            'chat' => $chat
+        ]);
+
+    }
+
+    /**
      * @param Chat $chat
      * @return Chat
      */
     private function formatMessages(Chat $chat) : Chat
     {
-        $users = $this->getDoctrine()->getRepository(User::class)->getUsersByIdsIndexed([$chat->getUser1(), $chat->getUser2()]);
+        if($chat->getUser1() == -1 || $chat->getUser2() == -1)
+        {
+            $outUsers = $chat->getMembers();
+            $users = [];
+            foreach($outUsers as $user)
+            {
+                $users[$user->getId()] = $user;
+            }
+        }
+        else
+        {
+            $users = $this->getDoctrine()->getRepository(User::class)->getUsersByIdsIndexed([$chat->getUser1(), $chat->getUser2()]);
+        }
+
 
         $newMessages = [];
         foreach ($chat->getMessages() as $message)
@@ -135,3 +184,4 @@ class ChatController extends AbstractController
     }
 }
 
+;

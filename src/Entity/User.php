@@ -89,11 +89,17 @@ class User implements UserInterface, \Serializable
      */
     private $lastActivityAt;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Chat", mappedBy="members")
+     */
+    private $chats;
+
     public function __construct()
     {
         $this->groups = new ArrayCollection();
         $this->posts = new ArrayCollection();
         $this->groupsMember = new ArrayCollection();
+        $this->chats = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -407,5 +413,33 @@ class User implements UserInterface, \Serializable
             }
         }
         return "";
+    }
+
+    /**
+     * @return Collection|Chat[]
+     */
+    public function getChats(): Collection
+    {
+        return $this->chats;
+    }
+
+    public function addChat(Chat $chat): self
+    {
+        if (!$this->chats->contains($chat)) {
+            $this->chats[] = $chat;
+            $chat->addMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChat(Chat $chat): self
+    {
+        if ($this->chats->contains($chat)) {
+            $this->chats->removeElement($chat);
+            $chat->removeMember($this);
+        }
+
+        return $this;
     }
 }

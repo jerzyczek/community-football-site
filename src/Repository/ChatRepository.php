@@ -39,6 +39,7 @@ class ChatRepository extends ServiceEntityRepository
 
         return $query->getQuery();
     }
+
     // /**
     //  * @return Chat[] Returns an array of Chat objects
     //  */
