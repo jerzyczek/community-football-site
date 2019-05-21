@@ -1,0 +1,26 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ group.name }}</h1>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPostModal">
+        Create Post
+    </button>
+</div>
+<div class="row groupItem" data-groupId = {{ group.id }}>
+    {%  if group.getPosts()|length > 0 %}
+        {% for post in group.getPosts() %}
+            {{ include('post/singlePost.html.twig', { 'post': post }) }}
+        {% endfor %}
+    {% else %}
+        <div class="col-md-12">
+            <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <strong class="d-inline-block mb-2 text-success">NO POSTS</strong>
+                    <h3 class="mb-0">NO POSTS EXAMPLE OF NO POST TEMPLATE</h3>
+                    <div class="mb-1 text-muted">0000-00-00</div>
+                    <p class="mb-auto">NO POSTS</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{{ include('post/modals/new.html.twig') }}

@@ -1,0 +1,131 @@
+nav{
+    background-color: rgba(31, 114, 14, 0.9);
+}
+.user_name{
+    font-size:14px;
+    font-weight: bold;
+}
+
+/*.comments-list .media{*/
+    /*border-bottom: 1px dotted #ccc;*/
+/*}*/
+
+textarea.form-control.commentField {
+    height: 40px;
+    /*resize: both;*/
+}
+
+
+
+
+div.commentResponse {
+    display: none;
+}
+
+.comments-list .childComment
+{
+    margin-left: 5%;
+}
+
+.comments-list .comment .media .dropdown
+{
+    display: inline;
+}
+
+.media .user-image
+{
+    width: 40px;
+    height: 40px;
+}
+
+.postItem .reactionActions a
+{
+    color: green;
+    cursor: pointer;
+}
+
+
+.postItem .reactionActions a:hover
+{
+    color: darkgreen;
+    cursor: pointer;
+}
+
+.morePostContent
+{
+    display: none;
+}
+
+.extraComment
+{
+    display: none;
+}
+
+.dot
+{
+    display: inline-block;
+    border-radius: 100%;
+    width: 10px;
+    height: 10px;
+}
+
+#usersOnlineSidebar .nav-item
+{
+    line-height: 1;
+}
+
+.chatBox
+{
+    padding: 0px;
+}
+
+#chatView
+{
+    padding: 0 !important;
+
+    height: 350px;
+    width: 100%;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
+    /*background-color: #4e555b;*/
+}
+
+.sidebarUser
+{
+    cursor: pointer;
+}
+
+.sidebarUser:hover
+{
+    color: darkgray;;
+}
+
+.change-password-button
+{
+    margin-top: 10px;
+}
+
+.white
+{
+    background-color: #ffffff;
+}
+
+.gray
+{
+    background-color: rgba(83, 167, 8, 0.67);
+}
+
+.thead-color
+{
+    background-color: #A6CE93;
+}
+
+.delete-group-btn
+{
+    margin-top: 10px;
+}
+
+.back-to-list-button
+{
+    margin-top: 10px;
+}

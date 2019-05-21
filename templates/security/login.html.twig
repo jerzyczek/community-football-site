@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block additionalStylesheets %}
+    <link href="{{ asset('asset/css/login.css') }}" rel="stylesheet" />
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+
+        <div class="col-md-6 align-content-center login-form-2 rounded">
+            <div class="login-logo">
+                <img src="http://pngimg.com/uploads/football/football_PNG52764.png" alt=""/>
+            </div>
+            <h3>Login</h3>
+            <form action="{{ path('security_login') }}" method="post">
+              <div class="form-group">
+                  <input type="text" class="form-control" id="username" name="_username" required="required" placeholder="Your Username *"  value="{{ last_username }}" />
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Your Password *" id="password" name="_password" required="required" />
+            </div>
+                <div class="form-group">
+                    <input type="submit" id="Login" name="Login" class="btnSubmit" value="Login" />
+                </div>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                <input type="hidden" name="_target_path" value="{{ app.request.get('redirect_to') }}">
+            </form>
+            <div class="d-flex justify-content-center links font-weight-bold">
+                Don't have an account?<a href="{{ path('user_register') }}">Sign Up</a>
+            </div>
+            <div class="d-flex justify-content-center font-weight-bold">
+                <a href="#">Forgot your password?</a>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

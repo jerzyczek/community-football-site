@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Group{% endblock %}
+
+{% block body %}
+  <div class="container-fluid">
+    <h1>Edit Group</h1>
+
+    {{ include('group/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('group_index') }}"><button class="btn btn-info back-to-list-button">Back to previous page</button></a>
+
+    {{ include('group/_delete_form.html.twig') }}
+  </div>
+{% endblock %}

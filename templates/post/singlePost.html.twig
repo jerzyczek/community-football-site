@@ -1,0 +1,34 @@
+
+<div data-sort="{{ post.id }}" class="col-md-12 no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative postItem" data-postid="{{ post.id }}">
+    <div class="row">
+        <div class="col p-4 flex-column position-static onlyPostContent">
+            {{ include('post/onlyPostContent.html.twig') }}
+        </div>
+
+
+        <div class="col-md-12 no-gutter comments-list">
+            {% if post.getComments()|length > 0 %}
+
+                <div class="page-header">
+                    <h2>Comments<small class="float-right">{{ post.getComments()|length }} comments</small></h2>
+                </div>
+                {% if post.getComments()|length > 2 %}<a href="#" class="showMoreComments" data-action="show">Show Previous Comments</a> {% endif %}
+                {% for key, comment in post.getComments()%}
+                    {{ include('comment/singleCommentView.html.twig') }}
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="col-md-12 input-group postResponse mb-3" role="group">
+            <img class="rounded-circle" src="http://lorempixel.com/40/40/people/1/">
+            <textarea class="form-control commentField rounded-top rounded-bottom" placeholder="Enter a Comment" ></textarea>
+        </div>
+    </div>
+</div>
+
+{# TODO zastanowic sie nad tymi modalami gdzie je umiescic #}
+
+{{ include('post/modals/delete.html.twig') }}
+{{ include('post/modals/edit.html.twig') }}
+{{ include('comment/modals/delete.html.twig') }}
+

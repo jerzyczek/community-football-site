@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block additionalStylesheets %}
+    <link href="{{ asset('asset/css/login.css') }}" rel="stylesheet" />
+{% endblock %}
+
+
+{% block body %}
+    <div class="container">
+
+
+
+        {#<div class="col-md-6 align-content-center login-form-2 rounded">#}
+            {#<div class="login-logo">#}
+                {#<img src="http://pngimg.com/uploads/football/football_PNG52764.png" alt=""/>#}
+            {#</div>#}
+            {#<h3>Login</h3>#}
+            {#<form action="{{ path('security_login') }}" method="post">#}
+                {#<div class="form-group">#}
+                    {#<input type="text" class="form-control" id="username" name="_username" required="required" placeholder="Your Username *"  value="{{ last_username }}" />#}
+                {#</div>#}
+                {#<div class="form-group">#}
+                    {#<input type="password" class="form-control" placeholder="Your Password *" id="password" name="_password" required="required" />#}
+                {#</div>#}
+                {#<div class="form-group">#}
+                    {#<input type="submit" id="Login" name="Login" class="btnSubmit" value="Login" />#}
+                {#</div>#}
+                {#<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">#}
+                {#<input type="hidden" name="_target_path" value="{{ app.request.get('redirect_to') }}">#}
+            {#</form>#}
+        {#</div>#}
+
+
+
+        {#{{ form_errors(form) }}#}
+        {#<div class="col-md-6 align-content-center login-form-2 rounded">#}
+            {#<div class="login-logo">#}
+                {#<img src="http://pngimg.com/uploads/football/football_PNG52764.png" alt=""/>#}
+            {#</div>#}
+            {#<h3>Register</h3>#}
+            {#<form name="user" method="post">#}
+                {#<div id="user">#}
+                    {#<div class="form-group">#}
+                        {#<input type="text" class="form-control" name="user[username]" required="required" placeholder="Your Username *" />#}
+                    {#</div>#}
+                    {#<div class="form-group">#}
+                        {#<input type="text" class="form-control" name="user[firstname]" required="required" placeholder="Your First name *" />#}
+                    {#</div>#}
+                    {#<div class="form-group">#}
+                        {#<input type="text" class="form-control" name="user[surname]" required="required" placeholder="Your Surname *" />#}
+                    {#</div>#}
+                    {#<div class="form-group">#}
+                        {#<input type="email" class="form-control" name="user[email]" required="required" placeholder="Your Email*" />#}
+
+                    {#</div>#}
+                    {#<div class="form-group">#}
+                        {#<input type="password" class="form-control" name="user[plainPassword][first]" required="required" placeholder="Your Password *" />#}
+                    {#</div>#}
+                    {#<div class="form-group">#}
+                        {#<input type="password" class="form-control" name="user[plainPassword][second]" required="required" placeholder="Your Password Confirm *" />#}
+                    {#</div>#}
+                    {#<div class="form-group">#}
+                        {#<input type="submit" id="user_Register" name="user[Register]" class="btnSubmit" value="Register"/>#}
+                    {#</div>#}
+                    {#<input type="hidden" id="user__token" name="user[_token]" value="j8v22UPkrT1SP4ywaLxWZIkz3-pAvsOsgZUOdZUjH80" />#}
+                {#</div>#}
+            {#</form>#}
+        {#</div>#}
+        <div class="col-md-6 align-content-center login-form-2 rounded">
+            <div class="login-logo">
+                <img src="http://pngimg.com/uploads/football/football_PNG52764.png" alt=""/>
+            </div>
+            <h3>Register</h3>
+        {{ form_start(form) }}
+
+        {{ form_widget(form) }}
+
+        {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+        {#<div class="col-md-6 align-content-center login-form-2 rounded">#}
+            {#<div class="login-logo">#}
+                {#<img src="http://pngimg.com/uploads/football/football_PNG52764.png" alt=""/>#}
+            {#</div>#}
+            {#<h3>Login</h3>#}
+            {#<form action="{{ path('security_login') }}" method="post">#}
+                {#<div class="form-group">#}
+                    {#<input type="text" class="form-control" id="username" name="_username" required="required" placeholder="Your Username *"  value="{{ last_username }}" />#}
+                {#</div>#}
+                {#<div class="form-group">#}
+                    {#<input type="password" class="form-control" placeholder="Your Password *" id="password" name="_password" required="required" />#}
+                {#</div>#}
+                {#<div class="form-group">#}
+                    {#<input type="submit" id="Login" name="Login" class="btnSubmit" value="Login" />#}
+                {#</div>#}
+                {#<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">#}
+                {#<input type="hidden" name="_target_path" value="{{ app.request.get('redirect_to') }}">#}
+            {#</form>#}
+        {#</div>#}

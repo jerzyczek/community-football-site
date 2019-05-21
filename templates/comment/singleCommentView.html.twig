@@ -1,0 +1,40 @@
+<div class="border-bottom comment {% if post and key < post.getComments()|length - 2  %}extraComment{% endif %}" id="commentid{{ comment.id }}" data-commentid="{{ comment.id }}">
+    <div class="media px-4 pt-4">
+
+        <a class="media-left">
+            <img class="rounded-circle" src="http://lorempixel.com/40/40/people/1/">
+        </a>
+        <div class="media-body ml-4">
+            <h4 class="media-heading user_name">{{ comment.getUser().getFullName() }}</h4>
+
+            <p class="text-body flex-md-wrap">{{ comment.content }}</p>
+            <small class="reactionActions">
+                {% if comment.isUserLikeComment(app.user) %}
+                    <a class="unlikeComment" ><i class="fa fa-thumbs-down"></i></a>
+                {% else %}
+                    <a class="likeComment"><i class="fa fa-thumbs-up"></i></a>
+                {% endif %}
+                <b>{{ comment.reactions|length }}</b> -
+                <a href="" class="responseLink">Response</a>&nbsp;
+            </small>
+            {% if comment.user.getId() == app.user.getId() %}
+                <div class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown"></a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item commentDelete" data-toggle="modal" data-commentid="{{ comment.id }}" data-commenttoken="{{ csrf_token('delete' ~ comment.id) }}" data-target="#deleteCommentModal">
+                            <i class="fa fa-trash">&nbsp;Delete</i>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <p class="float-right"><small>{{ comment.getCreatedAt()|time_diff ? : 'just now' }}</small></p>
+    </div>
+    <div class="col-md-12 form-group commentResponse" >
+        <textarea class="form-control commentField rounded-top rounded-bottom " placeholder="Enter a Comment" ></textarea>
+    </div>
+    {% for childComment in comment.getChildrenComments()%}
+        {{ include('comment/childComment.html.twig') }}
+    {% endfor %}
+</div>
+

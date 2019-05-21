@@ -1,0 +1,14 @@
+{% for user in users %}
+    <li class="nav-item row">
+        <span class="col-sm-8 pr-1 pl-3 d-block sidebarUser" data-userid="{{ user.getId() }}">
+            {{ user.getFullName() }}
+        </span>
+        <span class="col-sm-4 m-0 p-0 pr-3 text-right d-block">
+            {% if user.isActive() %}
+                <span class="dot bg-success "></span>
+            {% else %}
+                {{ user.getLastActivityAtShort() }}
+            {% endif %}
+        </span>
+    </li>
+{% endfor %}
