@@ -112,8 +112,14 @@ class CommentController extends AbstractController
      */
     public function deleteAjax(Request $request, Comment $comment): Response
     {
+        $entityManager = $this->getDoctrine()->getManager();
+        foreach ($comment->getChildrenComments() as $childComment)
+        {
+            $entityManager->remove($childComment);
+            $entityManager->flush();
+        }
         if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            ;
             $entityManager->remove($comment);
             $entityManager->flush();
         }
